@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeodesicLibrary", "GeodesicLibrary\GeodesicLibrary.csproj", "{EFCC6949-9EEB-4D14-98B2-5C5D1AAF1EA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeodesicLibraryTests", "GeodesicLibraryTests\GeodesicLibraryTests.csproj", "{6F4DE73F-3254-4577-AA4E-4CD76CF6238A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{EFCC6949-9EEB-4D14-98B2-5C5D1AAF1EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFCC6949-9EEB-4D14-98B2-5C5D1AAF1EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFCC6949-9EEB-4D14-98B2-5C5D1AAF1EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F4DE73F-3254-4577-AA4E-4CD76CF6238A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F4DE73F-3254-4577-AA4E-4CD76CF6238A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F4DE73F-3254-4577-AA4E-4CD76CF6238A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F4DE73F-3254-4577-AA4E-4CD76CF6238A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

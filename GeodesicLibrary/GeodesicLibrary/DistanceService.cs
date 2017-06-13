@@ -1,4 +1,6 @@
 ﻿using System;
+using GeodesicLibrary.Model;
+using GeodesicLibrary.Tools;
 
 namespace GeodesicLibrary
 {
@@ -19,7 +21,7 @@ namespace GeodesicLibrary
         /// <summary>
         /// Решение обратной геодезической задачи
         /// </summary>
-        public Tuple<double, double, double> OrthodromicEllipsoidDistance(double lon1, double lat1, double lon2, double lat2)
+        public InverseProblemAnswer OrthodromicEllipsoidDistance(double lon1, double lat1, double lon2, double lat2)
         {
             double l = (lon2 - lon1) * Math.PI / 180; // Разность геодезических долгот
 
@@ -41,7 +43,7 @@ namespace GeodesicLibrary
                     Math.Sqrt(Math.Pow(cosU2 * sinLambda, 2) + Math.Pow(cosU1 * sinU2 - sinU1 * cosU2 * cosLambda, 2));
 
                 if (sinSigma == 0)
-                    return Tuple.Create<double, double, double>(0, 0, 0);
+                    return new InverseProblemAnswer(0, 0, 0);
 
                 cosSigma = sinU1 * sinU2 + cosU1 * cosU2 * cosLambda;
                 sigma = Math.Atan(sinSigma / cosSigma);
@@ -61,7 +63,7 @@ namespace GeodesicLibrary
             } while (Math.Abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
 
             if (iterLimit == 0)
-                return Tuple.Create<double, double, double>(0, 0, 0);
+                return new InverseProblemAnswer(0, 0, 0);
 
             double uSq = cosSqAlpha * (Math.Pow(EquatorialRadius, 2) - Math.Pow(PolarRadius, 2)) /
                          Math.Pow(PolarRadius, 2);
@@ -80,7 +82,10 @@ namespace GeodesicLibrary
             var a2 = Math.Atan(cosU1 * Math.Sin(lambda) / (-sinU1 * cosU2 + cosU1 * sinU2 * Math.Cos(lambda))) * 180 /
                      Math.PI;
 
-            return Tuple.Create(s, a1, a2);
+            a1 = Azimuth.AzimuthRecovery(lon1, lat1, lon2, lat2, a1);
+            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+
+            return new InverseProblemAnswer(a1, a2, s);
         }
     }
 }

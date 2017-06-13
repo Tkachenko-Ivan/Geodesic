@@ -42,7 +42,11 @@
   <ItemGroup>
     <Compile Include="CoordinatesService.cs" />
     <Compile Include="DistanceService.cs" />
+    <Compile Include="Model\DirectProblemAnswer.cs" />
+    <Compile Include="Model\InverseProblemAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Azimuth.cs" />
+    <Compile Include="Tools\Converter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

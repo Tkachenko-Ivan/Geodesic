@@ -1,8 +1,10 @@
 ﻿using System;
+using GeodesicLibrary.Model;
+using GeodesicLibrary.Tools;
 
 namespace GeodesicLibrary
 {
-    class CoordinatesService
+    public class CoordinatesService
     {
         private double EquatorialRadius { get; }
 
@@ -19,7 +21,7 @@ namespace GeodesicLibrary
         /// <summary>
         /// Решение прямой геодезической задачи
         /// </summary>
-        public Tuple<double, double, double> DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
+        public DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
         {
             a1 = a1 * Math.PI / 180;
 
@@ -73,9 +75,13 @@ namespace GeodesicLibrary
                          c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
             var lon2 = -l + lon1 * Math.PI / 180;
 
-            var a2 = Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
+            lon2 = lon2 * 180 / Math.PI;
+            lat2 = lat2 * 180 / Math.PI;
 
-            return Tuple.Create(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, a2);
+            var a2 = -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+
+            return new DirectProblemAnswer(lon2, lat2, a2);
         }
 
         #region Пересечение двух ортодром

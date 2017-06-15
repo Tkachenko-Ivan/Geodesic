@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace GeodesicLibraryTests
 {
     /// <summary>
-    /// Тестируется решение прямой и обратной геодезических задач на элипсоиде. 
+    /// Тестируется решение прямой и обратной геодезических задач на сфероиде. 
     /// Для тестирования правильности отпределения азимута тестируются решения для всех сторон света
     /// </summary>
     /// <remarks>
@@ -24,7 +24,7 @@ namespace GeodesicLibraryTests
     ///         - прямой азимут из решения обратной задачи, должен совпадать с обратным азимутом из решения прямой задачи
     /// </remarks>
     [TestClass]
-    public class OrthodromicEllipsoidTests
+    public class OrthodromicSpheroidTests
     {
         /// <summary>
         /// Юго-Западное направление 
@@ -32,8 +32,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthWestDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444, 6367444);
+            var distanceService = new DistanceService(6367444, 6367444);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(28, 7, 38);
@@ -41,19 +41,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(13, 5, 46);
 
             // Решение обратной задачи
-            var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = distanceService.OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = distanceService.OrthodromicSpheroidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = distanceService.OrthodromicSpheroidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -67,8 +67,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthWestDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(13, 5, 46);
@@ -76,19 +76,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = distanceService.OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = distanceService.OrthodromicSpheroidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = distanceService.OrthodromicSpheroidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -102,8 +102,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthEastDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
             var lat1 = Converter.DergeeToDecimalDegree(28, 7, 38);
@@ -111,19 +111,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(13, 5, 46);
 
             // Решение обратной задачи
-            var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = distanceService.OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = distanceService.OrthodromicSpheroidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = distanceService.OrthodromicSpheroidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -137,8 +137,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthEastDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
             var lat1 = Converter.DergeeToDecimalDegree(13, 5, 46);
@@ -146,19 +146,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = distanceService.OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = distanceService.OrthodromicSpheroidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = distanceService.OrthodromicSpheroidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -172,8 +172,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(28, 7, 38);
@@ -184,7 +184,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -192,7 +192,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
@@ -207,8 +207,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthDirectionTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(13, 5, 46);
@@ -219,7 +219,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -227,7 +227,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
@@ -242,8 +242,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void WestDirectionMiddleTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(28, 7, 38);
@@ -254,7 +254,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -262,7 +262,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
@@ -277,8 +277,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EastDirectionMiddleTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
             var lat1 = Converter.DergeeToDecimalDegree(28, 7, 38);
@@ -289,7 +289,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -297,7 +297,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
@@ -312,8 +312,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void WestDirectionEquatorTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat1 = Converter.DergeeToDecimalDegree(0, 0, 0);
@@ -324,7 +324,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -332,7 +332,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
@@ -347,8 +347,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EastDirectionEquatorTest()
         {
-            var coordinatesService = new CoordinatesService(6378137, 6356752.3142);
-            var distanceService = new DistanceService(6378137, 6356752.3142);
+            var coordinatesService = new CoordinatesService(6367444.6571, 6367444.6571);
+            var distanceService = new DistanceService(6367444.6571, 6367444.6571);
 
             var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
             var lat1 = Converter.DergeeToDecimalDegree(0, 0, 0);
@@ -359,7 +359,7 @@ namespace GeodesicLibraryTests
             var inverseAnswer = distanceService.OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = coordinatesService.DirectProblemEllipsoid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var directAnswerForward = coordinatesService.DirectProblemSpheroid(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
             var distance1 = distanceService.OrthodromicEllipsoidDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
@@ -367,7 +367,7 @@ namespace GeodesicLibraryTests
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = coordinatesService.DirectProblemEllipsoid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var directAnswerReverse = coordinatesService.DirectProblemSpheroid(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
             var distance2 = distanceService.OrthodromicEllipsoidDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм

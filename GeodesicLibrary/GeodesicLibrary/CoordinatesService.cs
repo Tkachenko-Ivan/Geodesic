@@ -19,7 +19,7 @@ namespace GeodesicLibrary
         }
 
         /// <summary>
-        /// Решение прямой геодезической задачи
+        /// Решение прямой геодезической задачи на эллипсоиде
         /// </summary>
         public DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
         {
@@ -82,6 +82,28 @@ namespace GeodesicLibrary
             a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
 
             return new DirectProblemAnswer(lon2, lat2, a2);
+        }
+
+        /// <summary>
+        /// Решение прямой геодезической задачи на сфероиде
+        /// </summary>
+        public DirectProblemAnswer DirectProblemSpheroid(double lon1, double lat1, double a1, double s)
+        {
+            a1 = a1 * Math.PI / 180;
+            lat1 = lat1 * Math.PI / 180;
+
+            var sigma = s / PolarRadius;
+            var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) + Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
+
+            var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
+                         (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
+            var lon2 = - lambda + lon1 * Math.PI / 180;
+
+            var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /
+                     (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) * 180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, lon1 , lat1 * 180 / Math.PI, a2);
+
+            return new DirectProblemAnswer(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, a2);
         }
 
         #region Пересечение двух ортодром

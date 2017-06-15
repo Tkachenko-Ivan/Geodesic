@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="OrthodromicSpheroidTests.cs" />
     <Compile Include="OrthodromicEllipsoidTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

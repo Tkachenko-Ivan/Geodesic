@@ -20,10 +20,17 @@ namespace GeodesicLibrary
             PolarRadius = polarRadius;
         }
 
+        public InverseProblemAnswer OrthodromicDistance(double lon1, double lat1, double lon2, double lat2)
+        {
+            return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
+                ? OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2)
+                : OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+        }
+
         /// <summary>
         /// Решение обратной геодезической задачи на элипсоиде
         /// </summary>
-        public InverseProblemAnswer OrthodromicEllipsoidDistance(double lon1, double lat1, double lon2, double lat2)
+        private InverseProblemAnswer OrthodromicEllipsoidDistance(double lon1, double lat1, double lon2, double lat2)
         {
             double l = (lon2 - lon1) * Math.PI / 180; // Разность геодезических долгот
 
@@ -92,7 +99,7 @@ namespace GeodesicLibrary
         /// <summary>
         /// Решение обратной геодезической задачи на сфероиде
         /// </summary>
-        public InverseProblemAnswer OrthodromicSpheroidDistance(double lon1, double lat1, double lon2, double lat2)
+        private InverseProblemAnswer OrthodromicSpheroidDistance(double lon1, double lat1, double lon2, double lat2)
         {
             lat1 = lat1 * Math.PI / 180;
             lat2 = lat2 * Math.PI / 180;

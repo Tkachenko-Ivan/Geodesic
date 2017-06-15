@@ -6,6 +6,8 @@ namespace GeodesicLibrary
 {
     public class CoordinatesService
     {
+        private const double TOLERANCE = 0.00000000001;
+
         private double EquatorialRadius { get; }
 
         private double PolarRadius { get; }
@@ -18,10 +20,17 @@ namespace GeodesicLibrary
             PolarRadius = polarRadius;
         }
 
+        public DirectProblemAnswer DirectProblem(double lon1, double lat1, double a1, double s)
+        {
+            return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
+                ? DirectProblemSpheroid(lon1, lat1, a1, s)
+                : DirectProblemEllipsoid(lon1, lat1, a1, s);
+        }
+
         /// <summary>
         /// Решение прямой геодезической задачи на эллипсоиде
         /// </summary>
-        public DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
+        private DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
         {
             a1 = a1 * Math.PI / 180;
 
@@ -87,7 +96,7 @@ namespace GeodesicLibrary
         /// <summary>
         /// Решение прямой геодезической задачи на сфероиде
         /// </summary>
-        public DirectProblemAnswer DirectProblemSpheroid(double lon1, double lat1, double a1, double s)
+        private DirectProblemAnswer DirectProblemSpheroid(double lon1, double lat1, double a1, double s)
         {
             a1 = a1 * Math.PI / 180;
             lat1 = lat1 * Math.PI / 180;

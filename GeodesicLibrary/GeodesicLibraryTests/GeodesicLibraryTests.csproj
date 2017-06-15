@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="OrthodromicSpheroidTests.cs" />
     <Compile Include="OrthodromicEllipsoidTests.cs" />
+    <Compile Include="OrtodromicTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,118 @@
+﻿using System;
+using GeodesicLibrary.Model;
+using GeodesicLibrary.Tools;
+
+namespace GeodesicLibrary
+{
+    public class DirectProblemService
+    {
+        private const double TOLERANCE = 0.00000000001;
+
+        private double EquatorialRadius { get; }
+
+        private double PolarRadius { get; }
+
+        private double F => (EquatorialRadius - PolarRadius) / PolarRadius;
+
+        public DirectProblemService(double equatorialRadius, double polarRadius)
+        {
+            EquatorialRadius = equatorialRadius;
+            PolarRadius = polarRadius;
+        }
+
+        public DirectProblemAnswer DirectProblem(double lon1, double lat1, double a1, double s)
+        {
+            return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
+                ? DirectProblemSpheroid(lon1, lat1, a1, s)
+                : DirectProblemEllipsoid(lon1, lat1, a1, s);
+        }
+
+        /// <summary>
+        /// Решение прямой геодезической задачи на эллипсоиде
+        /// </summary>
+        private DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
+        {
+            a1 = a1 * Math.PI / 180;
+
+            double u1 = Math.Atan((1 - F) * Math.Tan(lat1 * Math.PI / 180));
+            double sigma1 = Math.Atan(Math.Tan(u1) / Math.Cos(a1));
+            var sinAlpha = Math.Cos(u1) * Math.Sin(a1);
+
+            var cosSqAlpha = 1 - sinAlpha * sinAlpha;
+
+            double uSq = cosSqAlpha * (Math.Pow(EquatorialRadius, 2) - Math.Pow(PolarRadius, 2)) /
+                         Math.Pow(PolarRadius, 2);
+            double a = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
+            double b = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
+
+            var si = s / PolarRadius / a;
+            double sigma = si;
+
+            double sigmaP, cos2SigmaM;
+            do
+            {
+                var sinSigma = Math.Sin(sigma);
+                var cosSigma = Math.Cos(sigma);
+
+                cos2SigmaM = Math.Cos(2 * sigma1 + sigma);
+                double deltaSigma = b * sinSigma *
+                                    (cos2SigmaM +
+                                     b / 4 *
+                                     (cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM) -
+                                      b / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) *
+                                      (-3 + 4 * cos2SigmaM * cos2SigmaM)));
+                sigmaP = sigma;
+                sigma = si + deltaSigma;
+            } while (Math.Abs(sigma - sigmaP) > 1e-12);
+
+            var sinU2 = Math.Sin(u1) * Math.Cos(sigma) + Math.Cos(u1) * Math.Sin(sigma) * Math.Cos(a1);
+            var lat2 = sinU2 /
+                       ((1 - F) *
+                        Math.Sqrt(sinAlpha * sinAlpha +
+                                  Math.Pow(
+                                      Math.Sin(u1) * Math.Sin(sigma) - Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1), 2)));
+            lat2 = Math.Atan(lat2);
+
+            // Разность долгот
+            var lamda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
+                              (Math.Cos(u1) * Math.Cos(sigma) - Math.Sin(u1) * Math.Sin(sigma) * Math.Cos(a1)));
+
+            double c = F / 16 * cosSqAlpha * (4 + F * (4 - 3 * cosSqAlpha));
+
+            var l = lamda - (1 - c) * F * sinAlpha *
+                        (sigma +
+                         c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+            var lon2 = -l + lon1 * Math.PI / 180;
+
+            lon2 = lon2 * 180 / Math.PI;
+            lat2 = lat2 * 180 / Math.PI;
+
+            var a2 = -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+
+            return new DirectProblemAnswer(lon2, lat2, a2);
+        }
+
+        /// <summary>
+        /// Решение прямой геодезической задачи на сфероиде
+        /// </summary>
+        private DirectProblemAnswer DirectProblemSpheroid(double lon1, double lat1, double a1, double s)
+        {
+            a1 = a1 * Math.PI / 180;
+            lat1 = lat1 * Math.PI / 180;
+
+            var sigma = s / PolarRadius;
+            var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) + Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
+
+            var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
+                         (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
+            var lon2 = - lambda + lon1 * Math.PI / 180;
+
+            var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /
+                     (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) * 180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, lon1 , lat1 * 180 / Math.PI, a2);
+
+            return new DirectProblemAnswer(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, a2);
+        }
+    }
+}

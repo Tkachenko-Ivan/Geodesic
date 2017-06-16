@@ -51,6 +51,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="IntersectSpheroidTests.cs" />
+    <Compile Include="IntersectEllipsoidTests.cs" />
+    <Compile Include="IntersectTests.cs" />
     <Compile Include="OrthodromicSpheroidVsEllipsoidTests.cs" />
     <Compile Include="OrthodromicSpheroidTests.cs" />
     <Compile Include="OrthodromicEllipsoidTests.cs" />

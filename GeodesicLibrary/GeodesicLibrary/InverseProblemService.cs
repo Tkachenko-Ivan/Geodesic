@@ -4,7 +4,7 @@ using GeodesicLibrary.Tools;
 
 namespace GeodesicLibrary
 {
-    public class DistanceService
+    public class InverseProblemService
     {
         private const double TOLERANCE = 0.00000000001;
 
@@ -14,7 +14,7 @@ namespace GeodesicLibrary
 
         private double F => (EquatorialRadius - PolarRadius) / PolarRadius;
 
-        public DistanceService(double equatorialRadius, double polarRadius)
+        public InverseProblemService(double equatorialRadius, double polarRadius)
         {
             EquatorialRadius = equatorialRadius;
             PolarRadius = polarRadius;

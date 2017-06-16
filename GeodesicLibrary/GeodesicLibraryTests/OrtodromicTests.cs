@@ -25,9 +25,9 @@ namespace GeodesicLibraryTests
     /// </remarks>
     public abstract class OrtodromicTests
     {
-        public abstract DistanceService DistanceService { get; set; }
+        public abstract InverseProblemService InverseProblemService { get; set; }
 
-        public abstract CoordinatesService CoordinatesService { get; set; }
+        public abstract DirectProblemService DirectProblemService { get; set; }
 
         /// <summary>
         /// Юго-Западное направление 
@@ -41,19 +41,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(13, 5, 46);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -73,19 +73,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -105,19 +105,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(13, 5, 46);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -137,19 +137,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -169,19 +169,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(13, 5, 46);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -201,19 +201,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -233,19 +233,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -265,19 +265,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -297,19 +297,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(0, 0, 0);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);
@@ -329,19 +329,19 @@ namespace GeodesicLibraryTests
             var lat2 = Converter.DergeeToDecimalDegree(0, 0, 0);
 
             // Решение обратной задачи
-            var inverseAnswer = DistanceService.OrthodromicDistance(lon1, lat1, lon2, lat2);
+            var inverseAnswer = InverseProblemService.OrthodromicDistance(lon1, lat1, lon2, lat2);
 
             // Решение прямой задачи 1
-            var directAnswerForward = CoordinatesService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
-            var distance1 = DistanceService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
+            var directAnswerForward = DirectProblemService.DirectProblem(lon1, lat1, inverseAnswer.ForwardAzimuth, inverseAnswer.Distance);
+            var distance1 = InverseProblemService.OrthodromicDistance(directAnswerForward.Longitude, directAnswerForward.Latitude, lon2, lat2).Distance;
             Assert.AreEqual(distance1, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerForward.Longitude, lon2, 0.000000001);
             Assert.AreEqual(directAnswerForward.Latitude, lat2, 0.000000001);
             Assert.AreEqual(inverseAnswer.ReverseAzimuth, directAnswerForward.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи 2
-            var directAnswerReverse = CoordinatesService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
-            var distance2 = DistanceService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
+            var directAnswerReverse = DirectProblemService.DirectProblem(lon2, lat2, inverseAnswer.ReverseAzimuth, inverseAnswer.Distance);
+            var distance2 = InverseProblemService.OrthodromicDistance(directAnswerReverse.Longitude, directAnswerReverse.Latitude, lon1, lat1)
                 .Distance;
             Assert.AreEqual(distance2, 0, 0.0006); // 0.06 мм
             Assert.AreEqual(directAnswerReverse.Longitude, lon1, 0.000000001);

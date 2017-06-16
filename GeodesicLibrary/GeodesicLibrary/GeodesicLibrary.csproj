@@ -40,8 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoordinatesService.cs" />
-    <Compile Include="DistanceService.cs" />
+    <Compile Include="DirectProblemService.cs" />
+    <Compile Include="IntersectService.cs" />
+    <Compile Include="InverseProblemService.cs" />
+    <Compile Include="Model\Coordinate.cs" />
     <Compile Include="Model\DirectProblemAnswer.cs" />
     <Compile Include="Model\InverseProblemAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

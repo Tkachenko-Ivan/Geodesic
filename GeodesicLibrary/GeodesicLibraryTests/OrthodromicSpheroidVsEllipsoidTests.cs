@@ -18,14 +18,14 @@ namespace GeodesicLibraryTests
     [TestClass]
     public class OrthodromicSpheroidVsEllipsoidTests
     {
-        public DistanceService DistanceService { get; set; }
+        public InverseProblemService InverseProblemService { get; set; }
 
-        public CoordinatesService CoordinatesService { get; set; }
+        public DirectProblemService DirectProblemService { get; set; }
 
         public OrthodromicSpheroidVsEllipsoidTests()
         {
-            CoordinatesService = new CoordinatesService(6367444, 6367444);
-            DistanceService = new DistanceService(6367444, 6367444);
+            DirectProblemService = new DirectProblemService(6367444, 6367444);
+            InverseProblemService = new InverseProblemService(6367444, 6367444);
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace GeodesicLibraryTests
             var lon2 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
 
-            PrivateObject distance = new PrivateObject(DistanceService);
-            PrivateObject coordinates = new PrivateObject(CoordinatesService);
+            PrivateObject distance = new PrivateObject(InverseProblemService);
+            PrivateObject coordinates = new PrivateObject(DirectProblemService);
 
             // Решение обратной задачи
             var byEllipsoidInverse =
@@ -72,8 +72,8 @@ namespace GeodesicLibraryTests
             var lon2 = Converter.DergeeToDecimalDegree(15, 25, 53);
             var lat2 = Converter.DergeeToDecimalDegree(0, 0, 0);
 
-            PrivateObject distance = new PrivateObject(DistanceService);
-            PrivateObject coordinates = new PrivateObject(CoordinatesService);
+            PrivateObject distance = new PrivateObject(InverseProblemService);
+            PrivateObject coordinates = new PrivateObject(DirectProblemService);
 
             // Решение обратной задачи
             var byEllipsoidInverse =

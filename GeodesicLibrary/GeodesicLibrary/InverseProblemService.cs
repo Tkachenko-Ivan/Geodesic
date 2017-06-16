@@ -20,22 +20,22 @@ namespace GeodesicLibrary
             PolarRadius = polarRadius;
         }
 
-        public InverseProblemAnswer OrthodromicDistance(double lon1, double lat1, double lon2, double lat2)
+        public InverseProblemAnswer OrthodromicDistance(Point coord1, Point coord2)
         {
             return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
-                ? OrthodromicSpheroidDistance(lon1, lat1, lon2, lat2)
-                : OrthodromicEllipsoidDistance(lon1, lat1, lon2, lat2);
+                ? OrthodromicSpheroidDistance(coord1, coord2)
+                : OrthodromicEllipsoidDistance(coord1, coord2);
         }
 
         /// <summary>
         /// Решение обратной геодезической задачи на элипсоиде
         /// </summary>
-        private InverseProblemAnswer OrthodromicEllipsoidDistance(double lon1, double lat1, double lon2, double lat2)
+        private InverseProblemAnswer OrthodromicEllipsoidDistance(Point coord1, Point coord2)
         {
-            double l = (lon2 - lon1) * Math.PI / 180; // Разность геодезических долгот
+            double l = (coord2.LonR - coord1.LonR); // Разность геодезических долгот
 
-            double u1 = Math.Atan((1 - F) * Math.Tan(lat1 * Math.PI / 180)); // Приведённая широта
-            double u2 = Math.Atan((1 - F) * Math.Tan(lat2 * Math.PI / 180));
+            double u1 = Math.Atan((1 - F) * Math.Tan(coord1.LatR)); // Приведённая широта
+            double u2 = Math.Atan((1 - F) * Math.Tan(coord2.LatR));
             double sinU1 = Math.Sin(u1), cosU1 = Math.Cos(u1);
             double sinU2 = Math.Sin(u2), cosU2 = Math.Cos(u2);
 
@@ -90,8 +90,8 @@ namespace GeodesicLibrary
                      Math.PI;
             var a2 = Math.Atan(cosU1 * Math.Sin(lambda) / (-sinU1 * cosU2 + cosU1 * sinU2 * Math.Cos(lambda))) * 180 /
                      Math.PI;
-            a1 = Azimuth.AzimuthRecovery(lon1, lat1, lon2, lat2, a1);
-            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+            a1 = Azimuth.AzimuthRecovery(coord1, coord2, a1);
+            a2 = Azimuth.AzimuthRecovery(coord2, coord1, a2);
 
             return new InverseProblemAnswer(a1, a2, s);
         }
@@ -99,16 +99,11 @@ namespace GeodesicLibrary
         /// <summary>
         /// Решение обратной геодезической задачи на сфероиде
         /// </summary>
-        private InverseProblemAnswer OrthodromicSpheroidDistance(double lon1, double lat1, double lon2, double lat2)
+        private InverseProblemAnswer OrthodromicSpheroidDistance(Point coord1, Point coord2)
         {
-            lat1 = lat1 * Math.PI / 180;
-            lat2 = lat2 * Math.PI / 180;
-            lon1 = lon1 * Math.PI / 180;
-            lon2 = lon2 * Math.PI / 180;
+            var ω = coord2.LonR - coord1.LonR;
 
-            var ω = lon2 - lon1;
-
-            var cosSigma = Math.Sin(lat1) * Math.Sin(lat2) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Cos(ω);
+            var cosSigma = Math.Sin(coord1.LatR) * Math.Sin(coord2.LatR) + Math.Cos(coord1.LatR) * Math.Cos(coord2.LatR) * Math.Cos(ω);
 
             double s;
             if (cosSigma < 0)
@@ -119,16 +114,16 @@ namespace GeodesicLibrary
                 s = PolarRadius * Math.Acos(cosSigma);
 
             var a1 =
-                Math.Atan(Math.Cos(lat2) * Math.Sin(ω) /
-                          (Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1) * Math.Cos(lat2) * Math.Cos(ω))) * 180 /
+                Math.Atan(Math.Cos(coord2.LatR) * Math.Sin(ω) /
+                          (Math.Cos(coord1.LatR) * Math.Sin(coord2.LatR) - Math.Sin(coord1.LatR) * Math.Cos(coord2.LatR) * Math.Cos(ω))) * 180 /
                 Math.PI;
             var a2 =
-                Math.Atan(Math.Cos(lat1) * Math.Sin(ω) /
-                          (Math.Cos(lat1) * Math.Sin(lat2) * Math.Cos(ω) - Math.Sin(lat1) * Math.Cos(lat2))) * 180 /
+                Math.Atan(Math.Cos(coord1.LatR) * Math.Sin(ω) /
+                          (Math.Cos(coord1.LatR) * Math.Sin(coord2.LatR) * Math.Cos(ω) - Math.Sin(coord1.LatR) * Math.Cos(coord2.LatR))) * 180 /
                 Math.PI;
 
-            a1 = Azimuth.AzimuthRecovery(lon1, lat1, lon2, lat2, a1);
-            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+            a1 = Azimuth.AzimuthRecovery(coord1, coord2, a1);
+            a2 = Azimuth.AzimuthRecovery(coord2, coord1, a2);
 
             return new InverseProblemAnswer(a1, a2, s);
         }

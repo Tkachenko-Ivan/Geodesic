@@ -2,16 +2,13 @@
 {
     public class DirectProblemAnswer
     {
-        public DirectProblemAnswer(double longitude, double latitude, double reverseAzimuth)
+        public DirectProblemAnswer(Point сoordinate, double reverseAzimuth)
         {
-            Longitude = longitude;
-            Latitude = latitude;
+            Сoordinate = сoordinate;
             ReverseAzimuth = reverseAzimuth;
         }
 
-        public double Longitude { get; }
-
-        public double Latitude { get; }
+        public Point Сoordinate { get; }
 
         public double ReverseAzimuth { get; }
     }

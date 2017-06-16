@@ -1,6 +1,5 @@
 ﻿using GeodesicLibrary;
 using GeodesicLibrary.Model;
-using GeodesicLibrary.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -24,22 +23,21 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void PointIntersectTest()
         {
-            var lon11 = Converter.DergeeToDecimalDegree(22, 36, 30);
-            var lat11 = Converter.DergeeToDecimalDegree(13, 5, 46);
-            var lon12 = Converter.DergeeToDecimalDegree(27, 25, 53);
-            var lat12 = Converter.DergeeToDecimalDegree(15, 7, 38);
-            var lon21 = Converter.DergeeToDecimalDegree(20, 36, 30);
-            var lat21 = Converter.DergeeToDecimalDegree(17, 5, 46);
-            var lon22 = Converter.DergeeToDecimalDegree(26, 25, 53);
-            var lat22 = Converter.DergeeToDecimalDegree(13, 7, 38);
+            var point1 = new Point(22, 36, 30, 13, 5, 46);
+            var point2 = new Point(27, 25, 53, 15, 7, 38);
+            var point3 = new Point(20, 36, 30, 17, 5, 46);
+            var point4 = new Point(26, 25, 53, 13, 7, 38);
 
-            var intersectCoord = IntersectService.IntersectOrthodromic(lon11, lat11, lon12, lat12, lon21, lat21, lon22, lat22);
+            var intersectCoord = IntersectService.IntersectOrthodromic(point1,
+                point2, point3, point4);
 
-            var firstOrtodrom = InverseProblemService.OrthodromicDistance(lon11, lat11, lon12, lat12);
-            var secondOrtodrom = InverseProblemService.OrthodromicDistance(lon21, lat21, lon22, lat22);
+            var firstOrtodrom = InverseProblemService.OrthodromicDistance(point1, point2);
+            var secondOrtodrom = InverseProblemService.OrthodromicDistance(point3, point4);
 
-            var firstOrtodrom2 = InverseProblemService.OrthodromicDistance(lon11, lat11, intersectCoord.Longitude, intersectCoord.Latitude);
-            var secondOrtodrom2 = InverseProblemService.OrthodromicDistance(lon21, lat21, intersectCoord.Longitude, intersectCoord.Latitude);
+            var firstOrtodrom2 = InverseProblemService.OrthodromicDistance(point1, new Point(intersectCoord.Longitude,
+                intersectCoord.Latitude));
+            var secondOrtodrom2 = InverseProblemService.OrthodromicDistance(point3, new Point(intersectCoord.Longitude,
+                intersectCoord.Latitude));
 
             // Точнее пока не получается (на эллипсоиде, на сфероиде всё ништяк)
             Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.005);

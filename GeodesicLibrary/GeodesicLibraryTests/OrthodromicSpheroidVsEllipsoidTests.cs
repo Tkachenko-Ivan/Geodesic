@@ -1,6 +1,5 @@
 ﻿using GeodesicLibrary;
 using GeodesicLibrary.Model;
-using GeodesicLibrary.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -34,31 +33,33 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void MiddleLatitudeTest()
         {
-            var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
-            var lat1 = Converter.DergeeToDecimalDegree(13, 5, 46);
-            var lon2 = Converter.DergeeToDecimalDegree(15, 25, 53);
-            var lat2 = Converter.DergeeToDecimalDegree(28, 7, 38);
+            var point1 = new Point(59, 36, 30, 13, 5, 46);
+            var point2 = new Point(15, 25, 53, 28, 7, 38);
 
             PrivateObject distance = new PrivateObject(InverseProblemService);
             PrivateObject coordinates = new PrivateObject(DirectProblemService);
 
             // Решение обратной задачи
             var byEllipsoidInverse =
-                (InverseProblemAnswer) distance.Invoke("OrthodromicEllipsoidDistance", lon1, lat1, lon2, lat2);
+                (InverseProblemAnswer) distance.Invoke("OrthodromicEllipsoidDistance", point1, point2);
             var bySpheroidInverse =
-                (InverseProblemAnswer) distance.Invoke("OrthodromicSpheroidDistance", lon1, lat1, lon2, lat2);
+                (InverseProblemAnswer) distance.Invoke("OrthodromicSpheroidDistance", point1, point2);
             Assert.AreEqual(byEllipsoidInverse.Distance, bySpheroidInverse.Distance, 0.0006); // 0.06 мм
             Assert.AreEqual(byEllipsoidInverse.ForwardAzimuth, bySpheroidInverse.ForwardAzimuth, 0.000000001);
             Assert.AreEqual(byEllipsoidInverse.ReverseAzimuth, bySpheroidInverse.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи
             var byEllipsoidDirect =
-                (DirectProblemAnswer)coordinates.Invoke("DirectProblemEllipsoid", lon1, lat1, byEllipsoidInverse.ForwardAzimuth, byEllipsoidInverse.Distance);
+                (DirectProblemAnswer)
+                coordinates.Invoke("DirectProblemEllipsoid", point1, byEllipsoidInverse.ForwardAzimuth,
+                    byEllipsoidInverse.Distance);
             var bySpheroidDirect =
-                (DirectProblemAnswer)coordinates.Invoke("DirectProblemSpheroid", lon1, lat1, bySpheroidInverse.ForwardAzimuth, bySpheroidInverse.Distance);
+                (DirectProblemAnswer)
+                coordinates.Invoke("DirectProblemSpheroid", point1, bySpheroidInverse.ForwardAzimuth,
+                    bySpheroidInverse.Distance);
             Assert.AreEqual(byEllipsoidDirect.ReverseAzimuth, bySpheroidDirect.ReverseAzimuth, 0.000000001);
-            Assert.AreEqual(byEllipsoidDirect.Latitude, bySpheroidDirect.Latitude, 0.000000001);
-            Assert.AreEqual(byEllipsoidDirect.Longitude, bySpheroidDirect.Longitude, 0.000000001);
+            Assert.AreEqual(byEllipsoidDirect.Сoordinate.Latitude, bySpheroidDirect.Сoordinate.Latitude, 0.000000001);
+            Assert.AreEqual(byEllipsoidDirect.Сoordinate.Longitude, bySpheroidDirect.Сoordinate.Longitude, 0.000000001);
         }
 
         /// <summary>
@@ -67,31 +68,33 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EquatorLatitudeTest()
         {
-            var lon1 = Converter.DergeeToDecimalDegree(59, 36, 30);
-            var lat1 = Converter.DergeeToDecimalDegree(0, 0, 0);
-            var lon2 = Converter.DergeeToDecimalDegree(15, 25, 53);
-            var lat2 = Converter.DergeeToDecimalDegree(0, 0, 0);
+            var point1 = new Point(59, 36, 30, 0, 0, 0);
+            var point2 = new Point(15, 25, 53, 0, 0, 0);
 
             PrivateObject distance = new PrivateObject(InverseProblemService);
             PrivateObject coordinates = new PrivateObject(DirectProblemService);
 
             // Решение обратной задачи
             var byEllipsoidInverse =
-                (InverseProblemAnswer)distance.Invoke("OrthodromicEllipsoidDistance", lon1, lat1, lon2, lat2);
+                (InverseProblemAnswer) distance.Invoke("OrthodromicEllipsoidDistance", point1, point2);
             var bySpheroidInverse =
-                (InverseProblemAnswer)distance.Invoke("OrthodromicSpheroidDistance", lon1, lat1, lon2, lat2);
+                (InverseProblemAnswer) distance.Invoke("OrthodromicSpheroidDistance", point1, point2);
             Assert.AreEqual(byEllipsoidInverse.Distance, bySpheroidInverse.Distance, 0.0006); // 0.06 мм
             Assert.AreEqual(byEllipsoidInverse.ForwardAzimuth, bySpheroidInverse.ForwardAzimuth, 0.000000001);
             Assert.AreEqual(byEllipsoidInverse.ReverseAzimuth, bySpheroidInverse.ReverseAzimuth, 0.000000001);
 
             // Решение прямой задачи
             var byEllipsoidDirect =
-                (DirectProblemAnswer)coordinates.Invoke("DirectProblemEllipsoid", lon1, lat1, byEllipsoidInverse.ForwardAzimuth, byEllipsoidInverse.Distance);
+                (DirectProblemAnswer)
+                coordinates.Invoke("DirectProblemEllipsoid", point1, byEllipsoidInverse.ForwardAzimuth,
+                    byEllipsoidInverse.Distance);
             var bySpheroidDirect =
-                (DirectProblemAnswer)coordinates.Invoke("DirectProblemSpheroid", lon1, lat1, bySpheroidInverse.ForwardAzimuth, bySpheroidInverse.Distance);
+                (DirectProblemAnswer)
+                coordinates.Invoke("DirectProblemSpheroid", point1, bySpheroidInverse.ForwardAzimuth,
+                    bySpheroidInverse.Distance);
             Assert.AreEqual(byEllipsoidDirect.ReverseAzimuth, bySpheroidDirect.ReverseAzimuth, 0.000000001);
-            Assert.AreEqual(byEllipsoidDirect.Latitude, bySpheroidDirect.Latitude, 0.000000001);
-            Assert.AreEqual(byEllipsoidDirect.Longitude, bySpheroidDirect.Longitude, 0.000000001);
+            Assert.AreEqual(byEllipsoidDirect.Сoordinate.Latitude, bySpheroidDirect.Сoordinate.Latitude, 0.000000001);
+            Assert.AreEqual(byEllipsoidDirect.Сoordinate.Longitude, bySpheroidDirect.Сoordinate.Longitude, 0.000000001);
         }
     }
 }

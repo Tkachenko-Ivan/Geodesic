@@ -1,6 +1,6 @@
 ﻿namespace GeodesicLibrary.Tools
 {
-    public static class Converter
+    internal static class Converter
     {
         public static double DergeeToDecimalDegree(double degrees, double minits, double seconds)
         {

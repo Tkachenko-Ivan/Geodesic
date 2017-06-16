@@ -51,13 +51,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="IntersectSpheroidTests.cs" />
-    <Compile Include="IntersectEllipsoidTests.cs" />
-    <Compile Include="IntersectTests.cs" />
+    <Compile Include="IntersectOrthodromic\IntersectSpheroidTests.cs" />
+    <Compile Include="IntersectOrthodromic\IntersectEllipsoidTests.cs" />
+    <Compile Include="IntersectOrthodromic\IntersectTests.cs" />
     <Compile Include="OrthodromicSpheroidVsEllipsoidTests.cs" />
-    <Compile Include="OrthodromicSpheroidTests.cs" />
-    <Compile Include="OrthodromicEllipsoidTests.cs" />
-    <Compile Include="OrtodromicTests.cs" />
+    <Compile Include="Orthodromic\OrthodromicSpheroidTests.cs" />
+    <Compile Include="Orthodromic\OrthodromicEllipsoidTests.cs" />
+    <Compile Include="Orthodromic\OrtodromicTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

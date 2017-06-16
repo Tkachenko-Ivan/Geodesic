@@ -20,21 +20,21 @@ namespace GeodesicLibrary
             PolarRadius = polarRadius;
         }
 
-        public DirectProblemAnswer DirectProblem(double lon1, double lat1, double a1, double s)
+        public DirectProblemAnswer DirectProblem(Point coord, double a1, double s)
         {
             return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
-                ? DirectProblemSpheroid(lon1, lat1, a1, s)
-                : DirectProblemEllipsoid(lon1, lat1, a1, s);
+                ? DirectProblemSpheroid(coord, a1, s)
+                : DirectProblemEllipsoid(coord, a1, s);
         }
 
         /// <summary>
         /// Решение прямой геодезической задачи на эллипсоиде
         /// </summary>
-        private DirectProblemAnswer DirectProblemEllipsoid(double lon1, double lat1, double a1, double s)
+        private DirectProblemAnswer DirectProblemEllipsoid(Point coord, double a1, double s)
         {
             a1 = a1 * Math.PI / 180;
 
-            double u1 = Math.Atan((1 - F) * Math.Tan(lat1 * Math.PI / 180));
+            double u1 = Math.Atan((1 - F) * Math.Tan(coord.LatR));
             double sigma1 = Math.Atan(Math.Tan(u1) / Math.Cos(a1));
             var sinAlpha = Math.Cos(u1) * Math.Sin(a1);
 
@@ -82,37 +82,37 @@ namespace GeodesicLibrary
             var l = lamda - (1 - c) * F * sinAlpha *
                         (sigma +
                          c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
-            var lon2 = -l + lon1 * Math.PI / 180;
+            var lon2 = -l + coord.LonR;
 
             lon2 = lon2 * 180 / Math.PI;
             lat2 = lat2 * 180 / Math.PI;
 
             var a2 = -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
-            a2 = Azimuth.AzimuthRecovery(lon2, lat2, lon1, lat1, a2);
+            a2 = Azimuth.AzimuthRecovery(new Point(lon2, lat2), coord, a2);
 
-            return new DirectProblemAnswer(lon2, lat2, a2);
+            return new DirectProblemAnswer(new Point(lon2, lat2), a2);
         }
 
         /// <summary>
         /// Решение прямой геодезической задачи на сфероиде
         /// </summary>
-        private DirectProblemAnswer DirectProblemSpheroid(double lon1, double lat1, double a1, double s)
+        private DirectProblemAnswer DirectProblemSpheroid(Point coord, double a1, double s)
         {
             a1 = a1 * Math.PI / 180;
-            lat1 = lat1 * Math.PI / 180;
+            var lat1 = coord.LatR;
 
             var sigma = s / PolarRadius;
             var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) + Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
 
             var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
                          (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
-            var lon2 = - lambda + lon1 * Math.PI / 180;
+            var lon2 = - lambda + coord.LonR;
 
             var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /
                      (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) * 180 / Math.PI;
-            a2 = Azimuth.AzimuthRecovery(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, lon1 , lat1 * 180 / Math.PI, a2);
+            a2 = Azimuth.AzimuthRecovery(new Point(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI), new Point(coord.Longitude, lat1 * 180 / Math.PI), a2);
 
-            return new DirectProblemAnswer(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI, a2);
+            return new DirectProblemAnswer(new Point(lon2* 180 / Math.PI, lat2 * 180 / Math.PI), a2);
         }
     }
 }

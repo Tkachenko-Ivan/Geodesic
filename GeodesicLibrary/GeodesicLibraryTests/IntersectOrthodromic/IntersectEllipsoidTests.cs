@@ -1,6 +1,4 @@
 ﻿using GeodesicLibrary;
-using GeodesicLibrary.Model;
-using GeodesicLibrary.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests

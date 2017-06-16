@@ -1,4 +1,5 @@
 ﻿using System;
+using GeodesicLibrary.Model;
 
 namespace GeodesicLibrary.Tools
 {
@@ -6,9 +7,14 @@ namespace GeodesicLibrary.Tools
     {
         private const double TOLERANCE = 0.00000000001;
 
-        public static double AzimuthRecovery(double lon1, double lat1, double lon2, double lat2, double azimuth)
+        public static double AzimuthRecovery(Point coord1, Point coord2, double azimuth)
         {
-              if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 < lon2) // запад
+            var lon1 = coord1.Longitude;
+            var lat1 = coord1.Latitude;
+            var lon2 = coord2.Longitude;
+            var lat2 = coord2.Latitude;
+
+            if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 < lon2) // запад
                   return 360 - Math.Abs(azimuth);
               if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 > lon2) // восток
                   return Math.Abs(azimuth);

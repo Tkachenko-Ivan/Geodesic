@@ -1,5 +1,5 @@
-﻿using GeodesicLibrary;
-using GeodesicLibrary.Model;
+﻿using GeodesicLibrary.Model;
+using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -35,8 +35,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthWestDirectionTest()
         {
-            var point1 = new Point(15, 25, 53, 28, 7, 38);
-            var point2 = new Point(59, 36, 30, 13, 5, 46);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
+            var point2 = new Point(59, 36, 30, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -71,8 +71,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthWestDirectionTest()
         {
-            var point1 = new Point(15, 25, 53, 13, 5, 46);
-            var point2 = new Point(59, 36, 30, 28, 7, 38);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
+            var point2 = new Point(59, 36, 30, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -107,8 +107,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthEastDirectionTest()
         {
-            var point1 = new Point(59, 36, 30, 28, 7, 38);
-            var point2 = new Point(15, 25, 53, 13, 5, 46);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -143,8 +143,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthEastDirectionTest()
         {
-            var point1 = new Point(59, 36, 30, 13, 5, 46);
-            var point2 = new Point(15, 25, 53, 28, 7, 38);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -179,8 +179,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void SouthDirectionTest()
         {
-            var point1 = new Point(15, 25, 53, 28, 7, 38);
-            var point2 = new Point(15, 25, 53, 13, 5, 46);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -215,8 +215,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void NorthDirectionTest()
         {
-            var point1 = new Point(15, 25, 53, 13, 5, 46);
-            var point2 = new Point(15, 25, 53, 28, 7, 38);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -251,8 +251,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void WestDirectionMiddleTest()
         {
-            var point1 = new Point(15, 25, 53, 28, 7, 38);
-            var point2 = new Point(59, 36, 30, 28, 7, 38);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
+            var point2 = new Point(59, 36, 30, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1, point2);
@@ -287,8 +287,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EastDirectionMiddleTest()
         {
-            var point1 = new Point(59, 36, 30, 28, 7, 38);
-            var point2 = new Point(15, 25, 53, 28, 7, 38);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1,
@@ -326,8 +326,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void WestDirectionEquatorTest()
         {
-            var point1 = new Point(15, 25, 53, 0, 0, 0);
-            var point2 = new Point(59, 36, 30, 0, 0, 0);
+            var point1 = new Point(15, 25, 53, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
+            var point2 = new Point(59, 36, 30, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1,
@@ -365,8 +365,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EastDirectionEquatorTest()
         {
-            var point1 = new Point(59, 36, 30, 0, 0, 0);
-            var point2 = new Point(15, 25, 53, 0, 0, 0);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
 
             // Решение обратной задачи
             var inverseAnswer = InverseProblemService.OrthodromicDistance(point1,

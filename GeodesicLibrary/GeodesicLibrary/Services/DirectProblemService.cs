@@ -2,27 +2,22 @@
 using GeodesicLibrary.Model;
 using GeodesicLibrary.Tools;
 
-namespace GeodesicLibrary
+namespace GeodesicLibrary.Services
 {
     public class DirectProblemService
     {
         private const double TOLERANCE = 0.00000000001;
 
-        private double EquatorialRadius { get; }
+        private readonly IEllipsoid _ellipsoid;
 
-        private double PolarRadius { get; }
-
-        private double F => (EquatorialRadius - PolarRadius) / PolarRadius;
-
-        public DirectProblemService(double equatorialRadius, double polarRadius)
+        public DirectProblemService(IEllipsoid ellipsoid)
         {
-            EquatorialRadius = equatorialRadius;
-            PolarRadius = polarRadius;
+            _ellipsoid = ellipsoid;
         }
 
         public DirectProblemAnswer DirectProblem(Point coord, double a1, double s)
         {
-            return Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE
+            return Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE
                 ? DirectProblemSpheroid(coord, a1, s)
                 : DirectProblemEllipsoid(coord, a1, s);
         }
@@ -34,18 +29,18 @@ namespace GeodesicLibrary
         {
             a1 = a1 * Math.PI / 180;
 
-            double u1 = Math.Atan((1 - F) * Math.Tan(coord.LatR));
+            double u1 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord.LatR));
             double sigma1 = Math.Atan(Math.Tan(u1) / Math.Cos(a1));
             var sinAlpha = Math.Cos(u1) * Math.Sin(a1);
 
             var cosSqAlpha = 1 - sinAlpha * sinAlpha;
 
-            double uSq = cosSqAlpha * (Math.Pow(EquatorialRadius, 2) - Math.Pow(PolarRadius, 2)) /
-                         Math.Pow(PolarRadius, 2);
+            double uSq = cosSqAlpha * (Math.Pow(_ellipsoid.EquatorialRadius, 2) - Math.Pow(_ellipsoid.PolarRadius, 2)) /
+                         Math.Pow(_ellipsoid.PolarRadius, 2);
             double a = 1 + uSq / 16384 * (4096 + uSq * (-768 + uSq * (320 - 175 * uSq)));
             double b = uSq / 1024 * (256 + uSq * (-128 + uSq * (74 - 47 * uSq)));
 
-            var si = s / PolarRadius / a;
+            var si = s / _ellipsoid.PolarRadius / a;
             double sigma = si;
 
             double sigmaP, cos2SigmaM;
@@ -67,7 +62,7 @@ namespace GeodesicLibrary
 
             var sinU2 = Math.Sin(u1) * Math.Cos(sigma) + Math.Cos(u1) * Math.Sin(sigma) * Math.Cos(a1);
             var lat2 = sinU2 /
-                       ((1 - F) *
+                       ((1 - _ellipsoid.F) *
                         Math.Sqrt(sinAlpha * sinAlpha +
                                   Math.Pow(
                                       Math.Sin(u1) * Math.Sin(sigma) - Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1), 2)));
@@ -77,9 +72,9 @@ namespace GeodesicLibrary
             var lamda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
                               (Math.Cos(u1) * Math.Cos(sigma) - Math.Sin(u1) * Math.Sin(sigma) * Math.Cos(a1)));
 
-            double c = F / 16 * cosSqAlpha * (4 + F * (4 - 3 * cosSqAlpha));
+            double c = _ellipsoid.F / 16 * cosSqAlpha * (4 + _ellipsoid.F * (4 - 3 * cosSqAlpha));
 
-            var l = lamda - (1 - c) * F * sinAlpha *
+            var l = lamda - (1 - c) * _ellipsoid.F * sinAlpha *
                         (sigma +
                          c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
             var lon2 = -l + coord.LonR;
@@ -101,7 +96,7 @@ namespace GeodesicLibrary
             a1 = a1 * Math.PI / 180;
             var lat1 = coord.LatR;
 
-            var sigma = s / PolarRadius;
+            var sigma = s / _ellipsoid.PolarRadius;
             var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) + Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
 
             var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /

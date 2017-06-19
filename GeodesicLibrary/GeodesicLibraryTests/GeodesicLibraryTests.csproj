@@ -51,9 +51,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Model\Ellipsoid.cs" />
     <Compile Include="IntersectOrthodromic\IntersectSpheroidTests.cs" />
     <Compile Include="IntersectOrthodromic\IntersectEllipsoidTests.cs" />
     <Compile Include="IntersectOrthodromic\IntersectTests.cs" />
+    <Compile Include="DifferentHemisphereTests.cs" />
+    <Compile Include="Model\Spheroid.cs" />
     <Compile Include="OrthodromicSpheroidVsEllipsoidTests.cs" />
     <Compile Include="Orthodromic\OrthodromicSpheroidTests.cs" />
     <Compile Include="Orthodromic\OrthodromicEllipsoidTests.cs" />

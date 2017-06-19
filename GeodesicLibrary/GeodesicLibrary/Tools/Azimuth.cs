@@ -9,15 +9,21 @@ namespace GeodesicLibrary.Tools
 
         public static double AzimuthRecovery(Point coord1, Point coord2, double azimuth)
         {
+            var result = AzimuthR(coord1, coord2, azimuth);
+            return result < TOLERANCE ? 360 : result;
+        }
+
+        private static double AzimuthR(Point coord1, Point coord2, double azimuth)
+        {
             var lon1 = coord1.Longitude;
             var lat1 = coord1.Latitude;
             var lon2 = coord2.Longitude;
             var lat2 = coord2.Latitude;
 
             if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 < lon2) // запад
-                  return 360 - Math.Abs(azimuth);
-              if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 > lon2) // восток
-                  return Math.Abs(azimuth);
+                return 360 - Math.Abs(azimuth);
+            if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 > lon2) // восток
+                return Math.Abs(azimuth);
 
             if (lon2 > lon1 && lat2 > lat1) // северо-запад
                 return 360 - Math.Abs(azimuth);
@@ -32,8 +38,6 @@ namespace GeodesicLibrary.Tools
                 azimuth = 180;
             if (Math.Abs(azimuth) < TOLERANCE && lat2 > lat1) // север
                 azimuth = 360;
-
-            
 
             return Math.Abs(azimuth);
         }

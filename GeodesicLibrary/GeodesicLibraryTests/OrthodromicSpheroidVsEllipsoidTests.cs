@@ -1,5 +1,6 @@
-﻿using GeodesicLibrary;
-using GeodesicLibrary.Model;
+﻿using GeodesicLibrary.Model;
+using GeodesicLibrary.Services;
+using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -23,8 +24,8 @@ namespace GeodesicLibraryTests
 
         public OrthodromicSpheroidVsEllipsoidTests()
         {
-            DirectProblemService = new DirectProblemService(6367444, 6367444);
-            InverseProblemService = new InverseProblemService(6367444, 6367444);
+            DirectProblemService = new DirectProblemService(new Spheroid());
+            InverseProblemService = new InverseProblemService(new Spheroid());
         }
 
         /// <summary>
@@ -33,8 +34,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void MiddleLatitudeTest()
         {
-            var point1 = new Point(59, 36, 30, 13, 5, 46);
-            var point2 = new Point(15, 25, 53, 28, 7, 38);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 28, 7, 38, CardinalLatitude.N);
 
             PrivateObject distance = new PrivateObject(InverseProblemService);
             PrivateObject coordinates = new PrivateObject(DirectProblemService);
@@ -68,8 +69,8 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void EquatorLatitudeTest()
         {
-            var point1 = new Point(59, 36, 30, 0, 0, 0);
-            var point2 = new Point(15, 25, 53, 0, 0, 0);
+            var point1 = new Point(59, 36, 30, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
+            var point2 = new Point(15, 25, 53, CardinalLongitude.W, 0, 0, 0, CardinalLatitude.N);
 
             PrivateObject distance = new PrivateObject(InverseProblemService);
             PrivateObject coordinates = new PrivateObject(DirectProblemService);

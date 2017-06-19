@@ -1,5 +1,5 @@
-﻿using GeodesicLibrary;
-using GeodesicLibrary.Model;
+﻿using GeodesicLibrary.Model;
+using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -23,10 +23,10 @@ namespace GeodesicLibraryTests
         [TestMethod]
         public void PointIntersectTest()
         {
-            var point1 = new Point(22, 36, 30, 13, 5, 46);
-            var point2 = new Point(27, 25, 53, 15, 7, 38);
-            var point3 = new Point(20, 36, 30, 17, 5, 46);
-            var point4 = new Point(26, 25, 53, 13, 7, 38);
+            var point1 = new Point(22, 36, 30, CardinalLongitude.W, 13, 5, 46, CardinalLatitude.N);
+            var point2 = new Point(27, 25, 53, CardinalLongitude.W, 15, 7, 38, CardinalLatitude.N);
+            var point3 = new Point(20, 36, 30, CardinalLongitude.W, 17, 5, 46, CardinalLatitude.N);
+            var point4 = new Point(26, 25, 53, CardinalLongitude.W, 13, 7, 38, CardinalLatitude.N);
 
             var intersectCoord = IntersectService.IntersectOrthodromic(point1,
                 point2, point3, point4);

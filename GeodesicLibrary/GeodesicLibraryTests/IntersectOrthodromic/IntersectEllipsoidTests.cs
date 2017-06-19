@@ -1,4 +1,5 @@
-﻿using GeodesicLibrary;
+﻿using GeodesicLibrary.Services;
+using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -22,8 +23,8 @@ namespace GeodesicLibraryTests
 
         public IntersectEllipsoidTests()
         {
-            IntersectService = new IntersectService(6378137, 6356752.3142);
-            InverseProblemService = new InverseProblemService(6378137, 6356752.3142);
+            IntersectService = new IntersectService(new Ellipsoid());
+            InverseProblemService = new InverseProblemService(new Ellipsoid());
         }
 
     }

@@ -40,9 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectProblemService.cs" />
-    <Compile Include="IntersectService.cs" />
-    <Compile Include="InverseProblemService.cs" />
+    <Compile Include="Services\DirectProblemService.cs" />
+    <Compile Include="Services\IntersectService.cs" />
+    <Compile Include="Services\InverseProblemService.cs" />
+    <Compile Include="Model\IEllipsoid.cs" />
     <Compile Include="Model\Point.cs" />
     <Compile Include="Model\DirectProblemAnswer.cs" />
     <Compile Include="Model\InverseProblemAnswer.cs" />

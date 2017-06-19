@@ -1,4 +1,5 @@
-﻿using GeodesicLibrary;
+﻿using GeodesicLibrary.Services;
+using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -12,8 +13,8 @@ namespace GeodesicLibraryTests
 
         public OrthodromicEllipsoidTests()
         {
-            DirectProblemService = new DirectProblemService(6378137, 6356752.3142);
-            InverseProblemService = new InverseProblemService(6378137, 6356752.3142);
+            DirectProblemService = new DirectProblemService(new Ellipsoid());
+            InverseProblemService = new InverseProblemService(new Ellipsoid());
         }
     }
 }

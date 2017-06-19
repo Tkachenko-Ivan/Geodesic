@@ -1,22 +1,17 @@
 ﻿using System;
 using GeodesicLibrary.Model;
 
-namespace GeodesicLibrary
+namespace GeodesicLibrary.Services
 {
     public class IntersectService
     {
         private const double TOLERANCE = 0.00000000001;
 
-        private double EquatorialRadius { get; }
+        private readonly IEllipsoid _ellipsoid;
 
-        private double PolarRadius { get; }
-
-        private double F => (EquatorialRadius - PolarRadius) / PolarRadius;
-
-        public IntersectService(double equatorialRadius, double polarRadius)
+        public IntersectService(IEllipsoid ellipsoid)
         {
-            EquatorialRadius = equatorialRadius;
-            PolarRadius = polarRadius;
+            _ellipsoid = ellipsoid;
         }
 
         public Point IntersectOrthodromic(Point coord11, Point coord12, Point coord21, Point coord22)
@@ -31,22 +26,22 @@ namespace GeodesicLibrary
         {
             longitude *= Math.PI / 180;
 
-            if (Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE)
+            if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
                 return Math.Atan(Math.Tan(coord1.LatR) / Math.Sin(coord2.LonR - coord1.LonR) * Math.Sin(coord2.LonR - longitude) +
                                  Math.Tan(coord2.LatR) / Math.Sin(coord2.LonR - coord1.LonR) * Math.Sin(longitude - coord1.LonR)) * 180 / Math.PI;
 
-            double u1 = Math.Atan((1 - F) * Math.Tan(coord1.LatR));
-            double u2 = Math.Atan((1 - F) * Math.Tan(coord2.LatR));
+            double u1 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord1.LatR));
+            double u2 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord2.LatR));
             double lambda = Lambda(coord2.LonR - coord1.LonR, u1, u2);
             double lambdaD1 = Lambda(longitude - coord1.LonR, u1, u2);
             double lambdaD2 = Lambda(coord2.LonR - longitude, u1, u2);
-            return Math.Atan(Math.Tan(u1) / Math.Sin(lambda) * Math.Sin(lambdaD2) / (1 - F) +
-                             Math.Tan(u2) / Math.Sin(lambda) * Math.Sin(lambdaD1) / (1 - F)) * 180 / Math.PI;
+            return Math.Atan(Math.Tan(u1) / Math.Sin(lambda) * Math.Sin(lambdaD2) / (1 - _ellipsoid.F) +
+                             Math.Tan(u2) / Math.Sin(lambda) * Math.Sin(lambdaD1) / (1 - _ellipsoid.F)) * 180 / Math.PI;
         }
 
         private double IntersectLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
         {
-            if (Math.Abs(EquatorialRadius - PolarRadius) < TOLERANCE)
+            if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
             {
                 double dl1 = Math.Sin(coord12.LonR - coord11.LonR);
                 double dl2 = Math.Sin(coord22.LonR - coord21.LonR);
@@ -70,10 +65,10 @@ namespace GeodesicLibrary
             }
             else
             {
-                double u11 = Math.Atan((1 - F) * Math.Tan(coord11.LatR));
-                double u12 = Math.Atan((1 - F) * Math.Tan(coord12.LatR));
-                double u21 = Math.Atan((1 - F) * Math.Tan(coord21.LatR));
-                double u22 = Math.Atan((1 - F) * Math.Tan(coord22.LatR));
+                double u11 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord11.LatR));
+                double u12 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord12.LatR));
+                double u21 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord21.LatR));
+                double u22 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord22.LatR));
 
                 double lambda1 = Lambda(coord12.LonR - coord11.LonR, u11, u12);
                 double lambda2 = Lambda(coord22.LonR - coord21.LonR, u21, u22);
@@ -129,10 +124,10 @@ namespace GeodesicLibrary
                 else
                     cos2SigmaM = 0;
 
-                double c = F / 16 * cosSqAlpha * (4 + F * (4 - 3 * cosSqAlpha));
+                double c = _ellipsoid.F / 16 * cosSqAlpha * (4 + _ellipsoid.F * (4 - 3 * cosSqAlpha));
                 lambdaP = lambda;
                 lambda = l +
-                         (1 - c) * F * sinAlpha *
+                         (1 - c) * _ellipsoid.F * sinAlpha *
                          (sigma + c * sinSigma * (cos2SigmaM + c * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
             } while (Math.Abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
 

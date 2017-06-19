@@ -1,4 +1,5 @@
-﻿using GeodesicLibrary;
+﻿using GeodesicLibrary.Services;
+using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests
@@ -22,8 +23,8 @@ namespace GeodesicLibraryTests
 
         public IntersectSpheroidTests()
         {
-            IntersectService = new IntersectService(6367444, 6367444);
-            InverseProblemService = new InverseProblemService(6367444, 6367444);
+            IntersectService = new IntersectService(new Spheroid());
+            InverseProblemService = new InverseProblemService(new Spheroid());
         }
     }
 }

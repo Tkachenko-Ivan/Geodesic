@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GeodesicLibrary.Model;
 
 namespace GeodesicLibrary.Services
@@ -22,80 +24,102 @@ namespace GeodesicLibrary.Services
             return new Point(inLon, (inLat1 + inLat2) / 2);
         }
 
-        private double GetLatitude(double longitude, Point coord1, Point coord2)
+        public double GetLatitude(double longitude, Point coord1, Point coord2)
         {
             longitude *= Math.PI / 180;
 
+            // Сфероид
             if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
-                return Math.Atan(Math.Tan(coord1.LatR) / Math.Sin(coord2.LonR - coord1.LonR) * Math.Sin(coord2.LonR - longitude) +
-                                 Math.Tan(coord2.LatR) / Math.Sin(coord2.LonR - coord1.LonR) * Math.Sin(longitude - coord1.LonR)) * 180 / Math.PI;
+                return Math.Atan(Math.Tan(coord1.LatR) / Math.Sin(coord2.LonR - coord1.LonR) *
+                                 Math.Sin(coord2.LonR - longitude) +
+                                 Math.Tan(coord2.LatR) / Math.Sin(coord2.LonR - coord1.LonR) *
+                                 Math.Sin(longitude - coord1.LonR)) * 180 / Math.PI;
 
-            double u1 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord1.LatR));
-            double u2 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord2.LatR));
-            double lambda = Lambda(coord2.LonR - coord1.LonR, u1, u2);
-            double lambdaD1 = Lambda(longitude - coord1.LonR, u1, u2);
-            double lambdaD2 = Lambda(coord2.LonR - longitude, u1, u2);
-            return Math.Atan(Math.Tan(u1) / Math.Sin(lambda) * Math.Sin(lambdaD2) / (1 - _ellipsoid.F) +
-                             Math.Tan(u2) / Math.Sin(lambda) * Math.Sin(lambdaD1) / (1 - _ellipsoid.F)) * 180 / Math.PI;
+            // Эллипсоид вращения
+            var inverce = new InverseProblemService(_ellipsoid);
+            var direct = new DirectProblemService(_ellipsoid);
+            Point coordM;
+            Point first = coord1, second = coord2;
+            do
+            {
+                var dist = inverce.OrthodromicDistance(first, second);
+                coordM = direct.DirectProblem(first, dist.ForwardAzimuth, dist.Distance / 2).Сoordinate;
+
+                if (Math.Abs(longitude - first.LonR) < TOLERANCE)
+                    return first.Latitude;
+                if (Math.Abs(longitude - second.LonR) < TOLERANCE)
+                    return second.Latitude;
+
+                if (longitude > first.LonR && longitude < coordM.LonR)
+                    second = coordM;
+                else if (longitude > coordM.LonR && longitude < second.LonR)
+                    first = coordM;
+            } while (Math.Abs(coordM.LonR - longitude) > TOLERANCE);
+            return coordM.Latitude;
         }
 
         private double IntersectLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
         {
+            // Сфероид
             if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
             {
                 double dl1 = Math.Sin(coord12.LonR - coord11.LonR);
                 double dl2 = Math.Sin(coord22.LonR - coord21.LonR);
 
                 // Первая ортодрома
-                double a1s = Math.Tan(coord11.LatR) / dl1 * Math.Sin(coord12.LonR);
-                double a2s = Math.Tan(coord12.LatR) / dl1 * Math.Cos(coord11.LonR);
-                double a1ss = Math.Tan(coord11.LatR) / dl1 * Math.Cos(coord12.LonR);
-                double a2ss = Math.Tan(coord12.LatR) / dl1 * Math.Sin(coord11.LonR);
+                double a1S = Math.Tan(coord11.LatR) / dl1 * Math.Sin(coord12.LonR);
+                double a2S = Math.Tan(coord12.LatR) / dl1 * Math.Cos(coord11.LonR);
+                double a1Ss = Math.Tan(coord11.LatR) / dl1 * Math.Cos(coord12.LonR);
+                double a2Ss = Math.Tan(coord12.LatR) / dl1 * Math.Sin(coord11.LonR);
 
                 // Вторая ортодрома
-                double a3s = Math.Tan(coord21.LatR) / dl2 * Math.Sin(coord22.LonR);
-                double a4s = Math.Tan(coord22.LatR) / dl2 * Math.Cos(coord21.LonR);
-                double a3ss = Math.Tan(coord21.LatR) / dl2 * Math.Cos(coord22.LonR);
-                double a4ss = Math.Tan(coord22.LatR) / dl2 * Math.Sin(coord21.LonR);
+                double a3S = Math.Tan(coord21.LatR) / dl2 * Math.Sin(coord22.LonR);
+                double a4S = Math.Tan(coord22.LatR) / dl2 * Math.Cos(coord21.LonR);
+                double a3Ss = Math.Tan(coord21.LatR) / dl2 * Math.Cos(coord22.LonR);
+                double a4Ss = Math.Tan(coord22.LatR) / dl2 * Math.Sin(coord21.LonR);
 
-                double b1 = a1s - a2ss - a3s + a4ss;
-                double b2 = a2s - a1ss + a3ss - a4s;
+                double b1 = a1S - a2Ss - a3S + a4Ss;
+                double b2 = a2S - a1Ss + a3Ss - a4S;
 
                 return Math.Atan(-b1 / b2) * 180 / Math.PI;
             }
-            else
+
+            // Эллипсоид вращения
+            var longs =
+                new List<double> { coord11.Longitude, coord12.Longitude, coord21.Longitude, coord22.Longitude }
+                    .OrderBy(
+                        s => s).ToList();
+            double first = longs[1], second = longs[2];
+            double midLon;
+            do
             {
-                double u11 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord11.LatR));
-                double u12 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord12.LatR));
-                double u21 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord21.LatR));
-                double u22 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord22.LatR));
+                midLon = (first + second) / 2;
 
-                double lambda1 = Lambda(coord12.LonR - coord11.LonR, u11, u12);
-                double lambda2 = Lambda(coord22.LonR - coord21.LonR, u21, u22);
+                var lat11 = GetLatitude(first, coord11, coord12);
+                var lat12 = GetLatitude(first, coord21, coord22);
 
-                double dl1 = Math.Sin(lambda1);
-                double dl2 = Math.Sin(lambda2);
+                var lat21 = GetLatitude(midLon, coord11, coord12);
+                var lat22 = GetLatitude(midLon, coord21, coord22);
 
-                // Первая ортодрома
-                double a1s = Math.Tan(u11) / dl1 * Math.Sin(coord12.LonR);
-                double a2s = Math.Tan(u12) / dl1 * Math.Cos(coord11.LonR);
-                double a1ss = Math.Tan(u11) / dl1 * Math.Cos(coord12.LonR);
-                double a2ss = Math.Tan(u12) / dl1 * Math.Sin(coord11.LonR);
+                var lat31 = GetLatitude(second, coord11, coord12);
+                var lat32 = GetLatitude(second, coord21, coord22);
 
-                // Вторая ортодрома
-                double a3s = Math.Tan(u21) / dl2 * Math.Sin(coord22.LonR);
-                double a4s = Math.Tan(u22) / dl2 * Math.Cos(coord21.LonR);
-                double a3ss = Math.Tan(u21) / dl2 * Math.Cos(coord22.LonR);
-                double a4ss = Math.Tan(u22) / dl2 * Math.Sin(coord21.LonR);
+                if ((lat21 - lat22) * (lat31 - lat32) < 0)
+                    first = midLon;
+                else if ((lat21 - lat22) * (lat11 - lat12) < 0)
+                    second = midLon;
+                else if (Math.Abs(lat11 - lat12) < TOLERANCE)
+                    return first;
+                else if (Math.Abs(lat21 - lat22) < TOLERANCE)
+                    return midLon;
+                else if (Math.Abs(lat31 - lat32) < TOLERANCE)
+                    return second;
 
-                double b1 = a1s - a2ss - a3s + a4ss;
-                double b2 = a2s - a1ss + a3ss - a4s;
-
-                return Math.Atan(-b1 / b2) * 180 / Math.PI;
-            }
+            } while (Math.Abs(first - second) > TOLERANCE);
+            return midLon;
         }
 
-        private double Lambda(double l, double u1, double u2)
+      /*  private double Lambda(double l, double u1, double u2)
         {
             double sinU1 = Math.Sin(u1), cosU1 = Math.Cos(u1);
             double sinU2 = Math.Sin(u2), cosU2 = Math.Cos(u2);
@@ -132,7 +156,7 @@ namespace GeodesicLibrary.Services
             } while (Math.Abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
 
             return lambda;
-        }
+        }*/
 
     }
 }

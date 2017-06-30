@@ -27,7 +27,7 @@ namespace GeodesicLibrary.Services
         /// </summary>
         private InverseProblemAnswer OrthodromicEllipsoidDistance(Point coord1, Point coord2)
         {
-            double l = (coord2.LonR - coord1.LonR); // Разность геодезических долгот
+            double l = coord2.LonR - coord1.LonR; // Разность геодезических долгот
 
             double u1 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord1.LatR)); // Приведённая широта
             double u2 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord2.LatR));
@@ -65,9 +65,6 @@ namespace GeodesicLibrary.Services
                          (1 - c) * _ellipsoid.F * sinAlpha *
                          (sigma + c * sinSigma * (cos2SigmaM + c * cosSigma * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
             } while (Math.Abs(lambda - lambdaP) > 1e-12 && --iterLimit > 0);
-
-            if (iterLimit == 0)
-                return new InverseProblemAnswer(0, 0, 0);
 
             double uSq = cosSqAlpha * (Math.Pow(_ellipsoid.EquatorialRadius, 2) - Math.Pow(_ellipsoid.PolarRadius, 2)) /
                          Math.Pow(_ellipsoid.PolarRadius, 2);

@@ -51,12 +51,12 @@ namespace GeodesicLibraryTests
             var answerSecond = InverseProblemService.OrthodromicDistance(point0, point2);
             var answerAll = InverseProblemService.OrthodromicDistance(point1, point2);
 
-            Assert.AreEqual(answerFirst.ForwardAzimuth, answerAll.ForwardAzimuth, 0.000000001);
-            Assert.AreEqual(answerSecond.ReverseAzimuth, answerAll.ReverseAzimuth, 0.000000001);
-            Assert.AreEqual(answerSecond.ForwardAzimuth, answerFirst.ForwardAzimuth, 0.000000001);
-            Assert.AreEqual(answerSecond.ReverseAzimuth, answerFirst.ReverseAzimuth, 0.000000001);
-            Assert.AreEqual(answerSecond.Distance, answerFirst.Distance, 0.000000001);
-            Assert.AreEqual(answerAll.Distance, answerSecond.Distance + answerFirst.Distance, 0.000000001);
+            Assert.AreEqual(answerFirst.ForwardAzimuth, answerAll.ForwardAzimuth, 0.00000001);
+            Assert.AreEqual(answerSecond.ReverseAzimuth, answerAll.ReverseAzimuth, 0.00000001);
+            Assert.AreEqual(answerSecond.ForwardAzimuth, answerFirst.ForwardAzimuth, 0.00000001);
+            Assert.AreEqual(answerSecond.ReverseAzimuth, answerFirst.ReverseAzimuth, 0.00000001);
+            Assert.AreEqual(answerSecond.Distance, answerFirst.Distance, 0.00000001);
+            Assert.AreEqual(answerAll.Distance, answerSecond.Distance + answerFirst.Distance, 0.00000001);
         }
 
         /// <summary>

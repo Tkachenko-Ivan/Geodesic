@@ -21,10 +21,13 @@ namespace GeodesicLibraryTests
 
         public sealed override InverseProblemService InverseProblemService { get; set; }
 
+        public sealed override IntermediatePointService IntermediatePointService { get; set; }
+
         public IntersectEllipsoidTests()
         {
             IntersectService = new IntersectService(new Ellipsoid());
             InverseProblemService = new InverseProblemService(new Ellipsoid());
+            IntermediatePointService = new IntermediatePointService(new Ellipsoid());
         }
 
     }

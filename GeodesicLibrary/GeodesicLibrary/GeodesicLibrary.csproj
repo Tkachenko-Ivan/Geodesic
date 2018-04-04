@@ -49,6 +49,7 @@
     <Compile Include="Model\DirectProblemAnswer.cs" />
     <Compile Include="Model\InverseProblemAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IntermediatePointService.cs" />
     <Compile Include="Tools\Azimuth.cs" />
     <Compile Include="Tools\Converter.cs" />
   </ItemGroup>

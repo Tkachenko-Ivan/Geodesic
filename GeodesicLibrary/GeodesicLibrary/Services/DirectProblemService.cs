@@ -4,6 +4,9 @@ using GeodesicLibrary.Tools;
 
 namespace GeodesicLibrary.Services
 {
+    /// <summary>
+    /// Решение прямой геодезический задачи
+    /// </summary>
     public class DirectProblemService
     {
         private const double TOLERANCE = 0.00000000001;

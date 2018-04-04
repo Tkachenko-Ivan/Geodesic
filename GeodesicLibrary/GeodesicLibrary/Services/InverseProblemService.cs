@@ -4,6 +4,9 @@ using GeodesicLibrary.Tools;
 
 namespace GeodesicLibrary.Services
 {
+    /// <summary>
+    /// Решение обратной геодезической задачи
+    /// </summary>
     public class InverseProblemService
     {
         private const double TOLERANCE = 0.00000000001;

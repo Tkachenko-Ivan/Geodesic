@@ -20,6 +20,8 @@ namespace GeodesicLibraryTests
 
         public abstract InverseProblemService InverseProblemService { get; set; }
 
+        public abstract IntermediatePointService IntermediatePointService { get; set; }
+
         [TestMethod]
         public void PointIntersectTest()
         {
@@ -53,7 +55,7 @@ namespace GeodesicLibraryTests
             var point1 = new Point(22, 0, 0, CardinalLongitude.E, 13, 0, 0, CardinalLatitude.N);
             var point2 = new Point(27, 0, 0, CardinalLongitude.E, 15, 0, 0, CardinalLatitude.N);
             var intersectLon = 24;
-            var lat = IntersectService.GetLatitude(intersectLon, point1, point2);
+            var lat = IntermediatePointService.GetLatitude(intersectLon, point1, point2);
 
             var answer1 = InverseProblemService.OrthodromicDistance(point1, point2);
             var answer2 = InverseProblemService.OrthodromicDistance(point1, new Point(intersectLon, lat));

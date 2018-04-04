@@ -72,9 +72,9 @@ namespace GeodesicLibrary.Services
                 if (Math.Abs(longitude - second.LonR) < TOLERANCE)
                     return second.Latitude;
 
-                if (longitude > first.LonR && longitude < coordM.LonR)
+                if (IsBetween(first.LonR, coordM.LonR, longitude))
                     second = coordM;
-                else if (longitude > coordM.LonR && longitude < second.LonR)
+                else if (IsBetween(second.LonR, coordM.LonR, longitude))
                     first = coordM;
             } while (Math.Abs(coordM.LonR - longitude) > TOLERANCE);
             return coordM.Latitude;
@@ -164,9 +164,37 @@ namespace GeodesicLibrary.Services
 
         private double GetLongitudeEllipsoid(double latitude, Point coord1, Point coord2)
         {
-            throw new NotImplementedException();
+            var inverce = new InverseProblemService(_ellipsoid);
+            var direct = new DirectProblemService(_ellipsoid);
+            Point coordM;
+            Point first = coord1, second = coord2;
+            do
+            {
+                var dist = inverce.OrthodromicDistance(first, second);
+                coordM = direct.DirectProblem(first, dist.ForwardAzimuth, dist.Distance / 2).Сoordinate;
+
+                if (Math.Abs(latitude - first.LatR) < TOLERANCE)
+                    return first.Longitude;
+                if (Math.Abs(latitude - second.LatR) < TOLERANCE)
+                    return second.Longitude;
+
+                if (IsBetween(first.LatR, coordM.LatR, latitude))
+                    second = coordM;
+                else if (IsBetween(second.LatR, coordM.LatR, latitude))
+                    first = coordM;
+            } while (Math.Abs(coordM.LatR - latitude) > TOLERANCE);
+            return coordM.Longitude;
         }
 
-        
+        /// <summary>
+        /// Проверяет утвержение о том, что временное значение находитя между первым и вторым
+        /// </summary>
+        /// <param name="first">Первое значение</param>
+        /// <param name="second">Второе значение</param>
+        /// <param name="temp">Проверяемое значение</param>
+        private bool IsBetween(double first, double second, double temp)
+        {
+            return temp > second && temp < first || temp > first && temp < second;
+        }
     }
 }

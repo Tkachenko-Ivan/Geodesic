@@ -1,4 +1,4 @@
-﻿namespace GeodesicLibrary.Model
+﻿namespace GeodesicLibrary.Infrastructure
 {
     public interface IEllipsoid
     {

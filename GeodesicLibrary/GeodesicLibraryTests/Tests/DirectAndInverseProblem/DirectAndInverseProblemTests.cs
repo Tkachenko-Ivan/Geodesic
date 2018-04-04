@@ -2,10 +2,10 @@
 using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     /// <summary>
-    /// Тестируется решение прямой и обратной геодезических задач на элипсоиде. 
+    /// Тестируется решение прямой и обратной геодезических задач. 
     /// Для тестирования правильности отпределения азимута тестируются решения для всех сторон света
     /// </summary>
     /// <remarks>
@@ -23,7 +23,7 @@ namespace GeodesicLibraryTests
     ///         - первая координата из условий обратной задачи должна совпасть с координатой из решения прямой задачи
     ///         - прямой азимут из решения обратной задачи, должен совпадать с обратным азимутом из решения прямой задачи
     /// </remarks>
-    public abstract class OrtodromicTests
+    public abstract class DirectAndInverseProblemTests
     {
         public abstract InverseProblemService InverseProblemService { get; set; }
 

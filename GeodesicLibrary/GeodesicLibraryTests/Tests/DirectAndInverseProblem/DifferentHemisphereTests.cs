@@ -3,7 +3,7 @@ using GeodesicLibrary.Services;
 using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     /// <summary>
     /// Тестируются случаи когда точки находятся в разных полушариях,
@@ -15,11 +15,8 @@ namespace GeodesicLibraryTests
     {
         public InverseProblemService InverseProblemService { get; set; }
 
-        public DirectProblemService DirectProblemService { get; set; }
-
         public DifferentHemisphereTests()
         {
-            DirectProblemService = new DirectProblemService(new Spheroid());
             InverseProblemService = new InverseProblemService(new Spheroid());
         }
 

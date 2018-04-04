@@ -3,7 +3,7 @@ using GeodesicLibrary.Services;
 using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     /// <summary>
     /// Тестирование соответствия решений подхода для расчётов на эллипсоиде и подхода для расчётов на сфероиде

@@ -3,7 +3,7 @@ using GeodesicLibrary.Services;
 using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     [TestClass]
     public class AzimutTests

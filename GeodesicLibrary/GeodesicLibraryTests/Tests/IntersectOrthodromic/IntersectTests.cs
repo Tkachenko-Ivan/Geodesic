@@ -2,7 +2,7 @@
 using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     /// <summary>
     /// Тестируется правильность вычисления точки пересечения двух ортодром

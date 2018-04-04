@@ -1,4 +1,5 @@
-﻿using GeodesicLibrary.Model;
+﻿using GeodesicLibrary.Infrastructure;
+using GeodesicLibrary.Model;
 
 namespace GeodesicLibraryTests.Model
 {

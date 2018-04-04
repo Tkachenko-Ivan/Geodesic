@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
 
 namespace GeodesicLibrary.Services

@@ -2,7 +2,7 @@
 using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests
+namespace GeodesicLibraryTests.Tests
 {
     /// <summary>
     /// Тестируется правильность вычисления точки пересечения двух ортодром
@@ -15,7 +15,7 @@ namespace GeodesicLibraryTests
     ///     - сравниваем азимуты, если точка пересечения найдена верно, азимуты не должны поменяться
     /// </remarks>
     [TestClass]
-    public class IntersectEllipsoidTests : IntersectTests
+    public class IntersectSpheroidTests : IntersectTests
     {
         public sealed override IntersectService IntersectService { get; set; }
 
@@ -23,12 +23,13 @@ namespace GeodesicLibraryTests
 
         public sealed override IntermediatePointService IntermediatePointService { get; set; }
 
-        public IntersectEllipsoidTests()
+        public IntersectSpheroidTests()
         {
-            IntersectService = new IntersectService(new Ellipsoid());
-            InverseProblemService = new InverseProblemService(new Ellipsoid());
-            IntermediatePointService = new IntermediatePointService(new Ellipsoid());
+            IntersectService = new IntersectService(new Spheroid());
+            InverseProblemService = new InverseProblemService(new Spheroid());
+            IntermediatePointService = new IntermediatePointService(new Spheroid());
         }
 
+        
     }
 }

@@ -9,9 +9,12 @@ namespace GeodesicLibraryTests.Tests.IntermediatePoint
     {
         public sealed override IntermediatePointService IntermediatePointService { get; set; }
 
+        public sealed override InverseProblemService InverseProblemService { get; set; }
+
         public IntermediatePointEllipsoidTests()
         {
             IntermediatePointService = new IntermediatePointService(new Ellipsoid());
+            InverseProblemService = new InverseProblemService(new Ellipsoid());
         }
     }
 }

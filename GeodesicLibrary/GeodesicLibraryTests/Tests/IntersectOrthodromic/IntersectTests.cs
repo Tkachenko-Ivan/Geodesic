@@ -20,8 +20,6 @@ namespace GeodesicLibraryTests.Tests
 
         public abstract InverseProblemService InverseProblemService { get; set; }
 
-        public abstract IntermediatePointService IntermediatePointService { get; set; }
-
         [TestMethod]
         public void PointIntersectTest()
         {
@@ -41,37 +39,8 @@ namespace GeodesicLibraryTests.Tests
             var secondOrtodrom2 = InverseProblemService.OrthodromicDistance(point3, new Point(intersectCoord.Longitude,
                 intersectCoord.Latitude));
 
-            // Точнее пока не получается (на эллипсоиде, на сфероиде всё ништяк)
             Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.00000001);
             Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);
-        }
-
-        /// <summary>
-        /// Тестируется правильность функции вычисления широты по известной долготе и ортодроме
-        /// </summary>
-        [TestMethod]
-        public void LatByLonTest()
-        {
-            var point1 = new Point(22, 0, 0, CardinalLongitude.E, 13, 0, 0, CardinalLatitude.N);
-            var point2 = new Point(27, 0, 0, CardinalLongitude.E, 15, 0, 0, CardinalLatitude.N);
-            var intersectLon = 24;
-            var lat = IntermediatePointService.GetLatitude(intersectLon, point1, point2);
-
-            var answer1 = InverseProblemService.OrthodromicDistance(point1, point2);
-            var answer2 = InverseProblemService.OrthodromicDistance(point1, new Point(intersectLon, lat));
-
-            Assert.AreEqual(answer1.ForwardAzimuth, answer2.ForwardAzimuth, 0.000000001);
-
-            // TODO: тестировать в разных полушариях
-        }
-
-        /// <summary>
-        /// Тест поиска точки пересечения если линии совпали полностью или частично
-        /// </summary>
-        [TestMethod]
-        public void OverlayIntersectTest()
-        {
-            // TODO: и полностью и частично
         }
     }
 }

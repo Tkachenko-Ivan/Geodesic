@@ -13,8 +13,8 @@ namespace GeodesicLibraryTests.Tests
 
         public DirectAndInverseProblemSpheroidTests()
         {
-            DirectProblemService = new DirectProblemService(new Ellipsoid());
-            InverseProblemService = new InverseProblemService(new Ellipsoid());
+            DirectProblemService = new DirectProblemService(new Spheroid());
+            InverseProblemService = new InverseProblemService(new Spheroid());
         }
     }
 }

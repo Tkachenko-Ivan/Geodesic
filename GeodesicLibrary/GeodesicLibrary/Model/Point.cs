@@ -34,6 +34,8 @@ namespace GeodesicLibrary.Model
         public Point(double lonD, double lonM, double lonS, CardinalLongitude lonCardinal, double latD, double latM,
             double latS, CardinalLatitude latCardinal)
         {
+            // TODO: защита от дурака
+
             _longitude = lonCardinal == CardinalLongitude.W
                 ? Converter.DergeeToDecimalDegree(-lonD, -lonM, -lonS)
                 : Converter.DergeeToDecimalDegree(lonD, lonM, lonS);

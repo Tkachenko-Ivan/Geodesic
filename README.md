@@ -64,7 +64,7 @@ var inverseAnswer = inverseEllipsoid.OrthodromicDistance(point1, point2);
 
 Ответ `inverseAnswer` содержит прямой и обратный азимуты `ForwardAzimuth`, `ReverseAzimuth`, а также расстояние между точками `Distance`.
 
-### <a name="Header3"></a> Вичичсление точки пересечения ортодром
+### <a name="Header3"></a> Вичисление точки пересечения ортодром
 
 Для вычисления точки пересечения ортодром, неоходимо создать объект класса `IntersectService`.
 
@@ -87,7 +87,7 @@ var intersectCoord = intersectEllipsoid.IntersectOrthodromic(point1, point2, poi
 
 Ответом будет точка - объект класса `Point`, в котором определены долгота и широта, в десятичных градуса (`Longitude`,`Latitude`) или в радианах (`LonR`,`LatR`).
 
-### <a name="Header4"></a> Вичичсление широты по долготе или долготы по широте 
+### <a name="Header4"></a> Вичисление широты по долготе или долготы по широте 
 
 Для рассчётов, неоходимо создать объект класса `IntermediatePointService`.
 

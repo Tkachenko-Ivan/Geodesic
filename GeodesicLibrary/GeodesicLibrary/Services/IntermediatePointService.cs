@@ -93,9 +93,9 @@ namespace GeodesicLibrary.Services
                     // Ближе через 180ый мередиан
                     // Проводим инверсию и решаем инвертированную задачу
                     double res = coord1.Longitude < 0
-                        ? GetLongitude(latitude, new Point(coord1.Longitude + 180, coord1.Latitude),
+                        ? GetLongitudeSpheroid(latitude, new Point(coord1.Longitude + 180, coord1.Latitude),
                             new Point(coord2.Longitude - 180, coord2.Latitude))
-                        : GetLongitude(latitude, new Point(coord1.Longitude - 180, coord1.Latitude),
+                        : GetLongitudeSpheroid(latitude, new Point(coord1.Longitude - 180, coord1.Latitude),
                             new Point(coord2.Longitude + 180, coord2.Latitude));
                     // Корректируем инверсию
                     return res > 0 ? res - 180 : 180 + res;

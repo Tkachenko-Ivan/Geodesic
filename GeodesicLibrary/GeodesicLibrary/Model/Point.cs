@@ -16,6 +16,14 @@ namespace GeodesicLibrary.Model
         /// <param name="lat">Широта, северная принимает положительные значения, южная - отрицательные</param>
         public Point(double lon, double lat)
         {
+            var message = "";
+            if (Math.Abs(lon) > 180)
+                message += $"Значение долготы должно находиться в интервале [-180;180], текущее значение долготы: {lon}.";
+            if (Math.Abs(lat) > 90)
+                message += (message == string.Empty ? "" : "\n") + $"Значение широты должно находиться в интервале [-90;90], текущее значение широты: {lat}.";
+            if (message != string.Empty)
+                throw new Exception(message);
+
             _longitude = lon;
             _latitude = lat;
         }
@@ -31,10 +39,16 @@ namespace GeodesicLibrary.Model
         /// <param name="latM">Широта, минуты</param>
         /// <param name="latS">Широта, секунды</param>
         /// <param name="latCardinal">Северное/Южное получшарие</param>
-        public Point(double lonD, double lonM, double lonS, CardinalLongitude lonCardinal, double latD, double latM,
+        public Point(int lonD, int lonM, double lonS, CardinalLongitude lonCardinal, int latD, int latM,
             double latS, CardinalLatitude latCardinal)
         {
-            // TODO: защита от дурака
+            var message = "";
+            if (lonM > 60 || lonM < 0 || latM > 60 || latM < 0)
+                message += "Минуты должны быть в интевале [0;60].";
+            if (lonS > 60 || lonS < 0 || latS > 60 || latS < 0)
+                message += (message == string.Empty ? "" : "\n") + "Секунды должны быть в интевале [0;60].";
+            if (message != string.Empty)
+                throw new Exception(message);
 
             _longitude = lonCardinal == CardinalLongitude.W
                 ? Converter.DergeeToDecimalDegree(-lonD, -lonM, -lonS)
@@ -43,6 +57,13 @@ namespace GeodesicLibrary.Model
             _latitude = latCardinal == CardinalLatitude.S
                 ? Converter.DergeeToDecimalDegree(-latD, -latM, -latS)
                 : Converter.DergeeToDecimalDegree(latD, latM, latS);
+
+            if (Math.Abs(_longitude) > 180)
+                message += $"Значение долготы должно находиться в интервале [-180;180], текущее значение долготы: {_longitude}.";
+            if (Math.Abs(_latitude) > 90)
+                message += (message == string.Empty ? "" : "\n") + $"Значение широты должно находиться в интервале [-90;90], текущее значение широты: {_latitude}.";
+            if (message != string.Empty)
+                throw new Exception(message);
         }
 
         /// <summary>

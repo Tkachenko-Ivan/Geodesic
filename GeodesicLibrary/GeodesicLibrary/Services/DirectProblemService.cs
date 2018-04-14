@@ -105,6 +105,15 @@ namespace GeodesicLibrary.Services
 
             var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
                          (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
+
+            // Для некоторых случаев здесь должны быть такие значения, не могу понять для каких
+            // Но для южного полушария оно без них не работает
+            /*
+            var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) - Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
+
+            var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
+                         (Math.Cos(sigma) * Math.Cos(lat1) + Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));*/
+
             var lon2 = - lambda + coord.LonR;
 
             var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /

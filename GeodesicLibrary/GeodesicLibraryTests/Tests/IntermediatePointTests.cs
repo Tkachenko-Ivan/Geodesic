@@ -1,19 +1,14 @@
-﻿using GeodesicLibrary.Model;
+﻿using GeodesicLibrary.Infrastructure;
+using GeodesicLibrary.Model;
 using GeodesicLibrary.Services;
 using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests.Tests.IntermediatePoint
 {
-    /// <summary>
-    /// Тестируется определение долготы как функции широты или широты как функции долготы
-    /// </summary>
-    public abstract class IntermediatePointTests
+    [TestClass]
+    public class IntermediatePointTests
     {
-        public abstract IntermediatePointService IntermediatePointService { get; set; }
-
-        public abstract InverseProblemService InverseProblemService { get; set; }
-
         [TestMethod]
         public void GetLonByLat()
         {
@@ -106,13 +101,22 @@ namespace GeodesicLibraryTests.Tests.IntermediatePoint
         /// <param name="lat2">Широта второй точки</param>
         private void Intersect(double lat, double lon1, double lat1, double lon2, double lat2)
         {
+            Intersect(lat, lon1, lat1, lon2, lat2, new Spheroid());
+            Intersect(lat, lon1, lat1, lon2, lat2, new Ellipsoid());
+        }
+
+        private void Intersect(double lat, double lon1, double lat1, double lon2, double lat2, IEllipsoid ellipsoid)
+        {
+            var intermediatePointService = new IntermediatePointService(ellipsoid);
+            var inverseProblemService = new InverseProblemService(ellipsoid);
+
             // Проверка на корректность
             Assert.IsTrue(lat >= lat1 && lat <= lat2 || lat <= lat1 && lat >= lat2);
 
             var coord1 = new Point(lon1, lat1);
             var coord2 = new Point(lon2, lat2);
-            var iLon = IntermediatePointService.GetLongitude(lat, coord1, coord2);
-            var iLat = IntermediatePointService.GetLatitude(iLon, coord1, coord2);
+            var iLon = intermediatePointService.GetLongitude(lat, coord1, coord2);
+            var iLat = intermediatePointService.GetLatitude(iLon, coord1, coord2);
 
             // Сравнить изначальную широту, и получившуюся в результате рассчётов
             Assert.AreEqual(lat, iLat, 0.000000001);
@@ -124,8 +128,8 @@ namespace GeodesicLibraryTests.Tests.IntermediatePoint
 
             // Точка должна лежать точно на линии,
             //  значит при решении обратной геодезической задачи азимут не должен измениться
-            var answer1 = InverseProblemService.OrthodromicDistance(coord1, coord2);
-            var answer2 = InverseProblemService.OrthodromicDistance(coord1, new Point(iLon, iLat));
+            var answer1 = inverseProblemService.OrthodromicDistance(coord1, coord2);
+            var answer2 = inverseProblemService.OrthodromicDistance(coord1, new Point(iLon, iLat));
             Assert.AreEqual(answer1.ForwardAzimuth, answer2.ForwardAzimuth, 0.000000001, answer1.ToString());
         }
     }

@@ -51,20 +51,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Tests\Azimuth\AzimuthSpheroidTests.cs" />
-    <Compile Include="Tests\Azimuth\AzimuthEllipsoidTests.cs" />
-    <Compile Include="Tests\IntermediatePoint\IntermediatePointEllipsoidTests.cs" />
-    <Compile Include="Tests\IntermediatePoint\IntermediatePointSpheroidTests.cs" />
-    <Compile Include="Tests\IntermediatePoint\IntermediatePointTests.cs" />
-    <Compile Include="Tests\Azimuth\AzimuthTests.cs" />
+    <Compile Include="Tests\IntermediatePointTests.cs" />
+    <Compile Include="Tests\AzimuthTests.cs" />
     <Compile Include="Model\Ellipsoid.cs" />
-    <Compile Include="Tests\IntersectOrthodromic\IntersectSpheroidTests.cs" />
-    <Compile Include="Tests\IntersectOrthodromic\IntersectEllipsoidTests.cs" />
-    <Compile Include="Tests\IntersectOrthodromic\IntersectTests.cs" />
+    <Compile Include="Tests\IntersectTests.cs" />
     <Compile Include="Model\Spheroid.cs" />
-    <Compile Include="Tests\DirectAndInverseProblem\DirectAndInverseProblemSpheroidTests.cs" />
-    <Compile Include="Tests\DirectAndInverseProblem\DirectAndInverseProblemEllipsoidTests.cs" />
-    <Compile Include="Tests\DirectAndInverseProblem\DirectAndInverseProblemTests.cs" />
+    <Compile Include="Tests\DirectAndInverseProblemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\SpheriodVsEllipsoidTests.cs" />
   </ItemGroup>

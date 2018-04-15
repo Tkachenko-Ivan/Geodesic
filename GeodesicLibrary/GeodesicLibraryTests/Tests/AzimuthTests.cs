@@ -75,9 +75,6 @@ namespace GeodesicLibraryTests.Tests.Azimuth
             var inverseProblemService = new InverseProblemService(ellipsoid);
             var directProblemService = new DirectProblemService(ellipsoid);
 
-            var answer1wtf = inverseProblemService.OrthodromicDistance(point1, point2);
-            var answer2wtf = inverseProblemService.OrthodromicDistance(point1, new Point(29.425400140682783, -27.050102221629007));
-
             var answer1 = inverseProblemService.OrthodromicDistance(point1, point2);
             var answer2 = inverseProblemService.OrthodromicDistance(point2, point1);
             Assert.AreEqual(answer1.ForwardAzimuth, answer2.ReverseAzimuth, 0.000000001);

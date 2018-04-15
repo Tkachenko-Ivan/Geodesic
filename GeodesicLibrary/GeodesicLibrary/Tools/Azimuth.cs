@@ -20,10 +20,21 @@ namespace GeodesicLibrary.Tools
             var lon2 = coord2.Longitude;
             var lat2 = coord2.Latitude;
 
+            // ТОDO: Изменение полушария с северного на южное или наоборот
             if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 < lon2) // запад
-                return 360 - Math.Abs(azimuth);
+            {
+                if (lat1 > 0) // Северное полушарие
+                    return 360 - Math.Abs(azimuth);
+                else // Южное полушарие
+                    return 180 + Math.Abs(azimuth);
+            }
             if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 > lon2) // восток
-                return Math.Abs(azimuth);
+            {
+                if (lat1 > 0) // Северное полушарие
+                    return Math.Abs(azimuth);
+                else // Южное полушарие
+                    return 180 - Math.Abs(azimuth);
+            }
 
             if (lon2 > lon1 && lat2 > lat1) // северо-запад
                 return 360 - Math.Abs(azimuth);

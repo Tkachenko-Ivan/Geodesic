@@ -116,16 +116,6 @@ namespace GeodesicLibraryTests.Tests
             // TODO: Ещё придумтаь его надо
         }
 
-        /// <summary>
-        /// Выполнить проверку под разными углами наклона
-        /// </summary>
-        /// <remarks>
-        /// Необходимо чтобы координаты образовывали квадрат, по крайней мере в прямоугольной проекции
-        /// </remarks>
-        /// <param name="pointSouthWest">Юго-Западный угол</param>
-        /// <param name="pointNorthWest">Северо-Западный угол</param>
-        /// <param name="pointSouthEast">Юго-Восточный угол</param>
-        /// <param name="pointNorthEast">Северо-Восточный угол</param>
         private void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointSouthEast, Point pointNorthEast)
         {
             PointIntersectTest(pointNorthWest, pointSouthEast, pointNorthEast, pointSouthWest);

@@ -1,138 +1,49 @@
-﻿using GeodesicLibrary.Infrastructure;
+﻿using System;
+using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
 using GeodesicLibrary.Services;
-using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests.Tests.Azimuth
 {
     [TestClass]
-    public class AzimutTests
-    {      
-        /// <summary>
-        /// Простая проверка правильности определения азимута.
-        ///     Проверка осуществляется в границах одного полушария, без пересечения экватора, нулевого меридиана и полюса
-        /// </summary>
+    public class AzimutTests : Plan
+    {
+
         [TestMethod]
         public void SimpleAzimutTest()
         {
-            // Северо-Восточное полушарие
-            var pointSouthWest = new Point(15, 10);
-            var pointNorthWest = new Point(15, 25);
-            var pointSouthEast = new Point(30, 10);
-            var pointNorthEast = new Point(30, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Северо-Западное полушарие
-            pointSouthWest = new Point(-45, 10);
-            pointNorthWest = new Point(-45, 25);
-            pointSouthEast = new Point(-30, 10);
-            pointNorthEast = new Point(-30, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Юго-Восточное полушарие
-            pointSouthWest = new Point(15, -40);
-            pointNorthWest = new Point(15, -25);
-            pointSouthEast = new Point(30, -40);
-            pointNorthEast = new Point(30, -25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Юго-Западное полушарие
-            pointSouthWest = new Point(-45, -40);
-            pointNorthWest = new Point(-45, -25);
-            pointSouthEast = new Point(-30, -40);
-            pointNorthEast = new Point(-30, -25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+            SimpleTest();
         }
 
-        /// <summary>
-        /// Проверка правильности определения азимута при условии пересечения экватора или нулевого меридиана
-        ///     проверка пересечения 180ого меридиана не выполняется
-        /// </summary>
+
         [TestMethod]
         public void IntersectionAzimutTest()
         {
-            // Северное полушарие: пересечение нулевого меридиана
-            var pointSouthWest = new Point(-15, 10);
-            var pointNorthWest = new Point(-15, 25);
-            var pointSouthEast = new Point(15, 10);
-            var pointNorthEast = new Point(15, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Южное полушарие: пересечение нулевого меридиана
-            pointSouthWest = new Point(-15, -25);
-            pointNorthWest = new Point(-15, -10);
-            pointSouthEast = new Point(15, -25);
-            pointNorthEast = new Point(15, -10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Восточное полушарие: пересечение экватора
-            pointSouthWest = new Point(15, -10);
-            pointNorthWest = new Point(15, 10);
-            pointSouthEast = new Point(30, -10);
-            pointNorthEast = new Point(30, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Западное полушарие: пересечение экватора
-            pointSouthWest = new Point(-45, -10);
-            pointNorthWest = new Point(-45, 10);
-            pointSouthEast = new Point(-15, -10);
-            pointNorthEast = new Point(-15, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Пересечение экватора и нелувого меридина
-            pointSouthWest = new Point(-15, -10);
-            pointNorthWest = new Point(-15, 10);
-            pointSouthEast = new Point(15, -10);
-            pointNorthEast = new Point(15, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+            //IntersectionTest();
+            Assert.Inconclusive();
         }
 
-        /// <summary>
-        /// Проверка правильности определения азимута при условии пересечения 180ого меридиана
-        /// </summary>
+
         [TestMethod]
         public void Intersection180AzimutTest()
         {
-            // В северном полушарии
-            var pointSouthWest = new Point(-170, 10);
-            var pointNorthWest = new Point(-170, 25);
-            var pointSouthEast = new Point(170, 10);
-            var pointNorthEast = new Point(170, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // В южном полушарии
-            pointSouthWest = new Point(-170, -25);
-            pointNorthWest = new Point(-170, -10);
-            pointSouthEast = new Point(170, -25);
-            pointNorthEast = new Point(170, -10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // На экваторе
-            pointSouthWest = new Point(-170, -10);
-            pointNorthWest = new Point(-170, 10);
-            pointSouthEast = new Point(170, -10);
-            pointNorthEast = new Point(170, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+            //Intersection180Test();
+            Assert.Inconclusive();
         }
 
-        /// <summary>
-        /// Проверка правильности определения азимута при условии полюса
-        /// </summary>
-        /// <remarks>
-        /// Помимо прочего, при пересечении полюса - меняется знак (как и в целом при пересечении 180ого меридиана)
-        /// </remarks>
+        [TestMethod]
+        public void LongLineAzimutTest()
+        {
+            //LongLineTest();
+            Assert.Inconclusive();
+        }
+
         [TestMethod]
         public void IntersectionPolarAzimutTest()
         {
-            /*var inverseProblemAnswer1 = AzimuthTest(new Point(30, 80), new Point(-150, 80));
-            Assert.AreEqual(inverseProblemAnswer1.ForwardAzimuth, inverseProblemAnswer1.ReverseAzimuth, 0.000000001);
-
-            var inverseProblemAnswer2 = AzimuthTest(new Point(45, 65), new Point(-135, 65));
-            Assert.AreEqual(inverseProblemAnswer2.ForwardAzimuth, inverseProblemAnswer2.ReverseAzimuth, 0.000000001);
-
-            // Как пересекать полюс значения не имеет - ответ должен быть тот же
-            Assert.AreEqual(inverseProblemAnswer1.ForwardAzimuth, inverseProblemAnswer2.ForwardAzimuth, 0.000000001);*/
+            //IntersectionPolarTest();
+            Assert.Inconclusive();
         }
 
         /// <summary>
@@ -142,37 +53,9 @@ namespace GeodesicLibraryTests.Tests.Azimuth
         public void СhangeOfAzimutTest()
         {
             // TODO: доделать когда разберусь с прямой геодезической задачей
+            Assert.Inconclusive();
         }
 
-        /// <summary>
-        /// Выполнить проверку под разными углами наклона
-        /// </summary>
-        /// <remarks>
-        /// Необходимо чтобы координаты образовывали квадрат, по крайней мере в прямоугольной проекции
-        /// </remarks>
-        /// <param name="pointSouthWest">Юго-Западный угол</param>
-        /// <param name="pointNorthWest">Северо-Западный угол</param>
-        /// <param name="pointSouthEast">Юго-Восточный угол</param>
-        /// <param name="pointNorthEast">Северо-Восточный угол</param>
-        private void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointSouthEast, Point pointNorthEast)
-        {
-            // На Сервер
-            AzimuthTest(pointSouthWest, pointNorthWest);
-            // На Северо-Восток
-            AzimuthTest(pointSouthWest, pointNorthEast);
-            // На Восток
-            AzimuthTest(pointSouthWest, pointSouthEast);
-            // На Юго-Восток
-            AzimuthTest(pointNorthWest, pointSouthEast);
-            // На Юг
-            AzimuthTest(pointNorthWest, pointSouthWest);
-            // На Юго-Запад
-            AzimuthTest(pointNorthEast, pointSouthWest);
-            // На Запад
-            AzimuthTest(pointSouthEast, pointSouthWest);
-            // На Северо-Запад
-            AzimuthTest(pointSouthEast, pointNorthWest);
-        }
 
         /// <summary>
         /// Тестируется правильность определения азимута
@@ -187,28 +70,26 @@ namespace GeodesicLibraryTests.Tests.Azimuth
         ///     - из первой точки по заданной дистанции мы решаем прямую геодезическую задача: должны попасть во вторую точку
         ///     - и наоборот 
         /// </remarks>
-        private void AzimuthTest(Point point1, Point point2)
-        {
-            AzimuthTest(point1, point2, new Spheroid());
-            AzimuthTest(point1, point2, new Ellipsoid());
-        }
-
-        private void AzimuthTest(Point point1, Point point2, IEllipsoid ellipsoid)
+        public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)
         {
             var inverseProblemService = new InverseProblemService(ellipsoid);
             var directProblemService = new DirectProblemService(ellipsoid);
+
+            var answer1wtf = inverseProblemService.OrthodromicDistance(point1, point2);
+            var answer2wtf = inverseProblemService.OrthodromicDistance(point1, new Point(29.425400140682783, -27.050102221629007));
 
             var answer1 = inverseProblemService.OrthodromicDistance(point1, point2);
             var answer2 = inverseProblemService.OrthodromicDistance(point2, point1);
             Assert.AreEqual(answer1.ForwardAzimuth, answer2.ReverseAzimuth, 0.000000001);
             Assert.AreEqual(answer1.ReverseAzimuth, answer2.ForwardAzimuth, 0.000000001);
 
-            // TODO: Тут какая-то беда с прямой геодезической задачей, но азимут определяется верно
-            // Решение прямой геодезической задачи, но с ним что-то не то
-            /*var answerPoint1 = directProblemService.DirectProblem(point1, answer1.ForwardAzimuth, answer1.Distance);
+            var answerPoint1 = directProblemService.DirectProblem(point1, answer1.ForwardAzimuth, answer1.Distance);
             Assert.AreEqual(point2.Latitude, answerPoint1.Сoordinate.Latitude, 0.000000001);
-            Assert.AreEqual(point2.Longitude, answerPoint1.Сoordinate.Longitude, 0.000000001);*/
-        }
+            Assert.AreEqual(point2.Longitude, answerPoint1.Сoordinate.Longitude, 0.000000001);
 
+            var answerPoint2 = directProblemService.DirectProblem(point2, answer2.ForwardAzimuth, answer2.Distance);
+            Assert.AreEqual(point1.Latitude, answerPoint2.Сoordinate.Latitude, 0.000000001);
+            Assert.AreEqual(point1.Longitude, answerPoint2.Сoordinate.Longitude, 0.000000001);
+        }
     }
 }

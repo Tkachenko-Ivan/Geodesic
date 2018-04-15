@@ -58,6 +58,7 @@
     <Compile Include="Model\Spheroid.cs" />
     <Compile Include="Tests\DirectAndInverseProblemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\Plan.cs" />
     <Compile Include="Tests\SpheriodVsEllipsoidTests.cs" />
   </ItemGroup>
   <ItemGroup>

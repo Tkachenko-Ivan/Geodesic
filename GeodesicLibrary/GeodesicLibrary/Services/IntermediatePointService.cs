@@ -53,15 +53,17 @@ namespace GeodesicLibrary.Services
             // Приводим задачу к диапазону координат от -90 до +90
             if (coord1.Longitude < -90 || coord2.Longitude < -90)
             {
+                var delta = -(Math.Min(coord1.Longitude, coord2.Longitude) + 90);
                 return
-                    GetLatitude(longitude + 90, new Point(coord1.Longitude + 90, coord1.Latitude),
-                        new Point(coord2.Longitude + 90, coord2.Latitude));
+                    GetLatitude(longitude + delta, new Point(coord1.Longitude + delta, coord1.Latitude),
+                        new Point(coord2.Longitude + delta, coord2.Latitude));
             }
             if (coord1.Longitude > 90 || coord2.Longitude > 90)
             {
+                var delta = (Math.Max(coord1.Longitude, coord2.Longitude) - 90);
                 return
-                    GetLatitude(longitude - 90, new Point(coord1.Longitude - 90, coord1.Latitude),
-                        new Point(coord2.Longitude - 90, coord2.Latitude));
+                    GetLatitude(longitude - delta, new Point(coord1.Longitude - delta, coord1.Latitude),
+                        new Point(coord2.Longitude - delta, coord2.Latitude));
             }
 
             // Видимо задача и так в нужном диапазоне
@@ -104,15 +106,17 @@ namespace GeodesicLibrary.Services
             // Приводим задачу к диапазону координат от -90 до +90
             if (coord1.Longitude < -90 || coord2.Longitude < -90)
             {
+                var delta = -(Math.Min(coord1.Longitude, coord2.Longitude) + 90);
                 return
-                    GetLongitude(latitude, new Point(coord1.Longitude + 90, coord1.Latitude),
-                        new Point(coord2.Longitude + 90, coord2.Latitude)) - 90;
+                    GetLongitude(latitude, new Point(coord1.Longitude + delta, coord1.Latitude),
+                        new Point(coord2.Longitude + delta, coord2.Latitude)) - delta;
             }
             if (coord1.Longitude > 90 || coord2.Longitude > 90)
             {
+                var delta = (Math.Max(coord1.Longitude, coord2.Longitude) - 90);
                 return
-                    GetLongitude(latitude, new Point(coord1.Longitude - 90, coord1.Latitude),
-                        new Point(coord2.Longitude - 90, coord2.Latitude)) + 90;
+                    GetLongitude(latitude, new Point(coord1.Longitude - delta, coord1.Latitude),
+                        new Point(coord2.Longitude - delta, coord2.Latitude)) + delta;
             }
 
             // Видимо задача и так в нужном диапазоне
@@ -168,12 +172,19 @@ namespace GeodesicLibrary.Services
 
             // В зависимости от значений c, b и угла - разные преобразования ответа
 
-            if (c > 0 && b > 0)
-                return (lonfet + Math.Atan(c / b)) * 180 / Math.PI - 90;
-            if (c < 0 && b < 0)
-                return -90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
-
             var angle = Math.Atan((coord2.LatR - coord1.LatR) / (coord2.LonR - coord1.LonR)) * 180 / Math.PI;
+
+            // Это что-то странное, здесь я окончательнос перестал что-либо понимать, 
+            // но так, или иначе эта штуковина заработала
+            if (c < 0 && b < 0 && angle > 0)
+                return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90;
+            if (c > 0 && b > 0 && angle > 0)
+                return (lonfet + Math.Atan(c / b)) * 180 / Math.PI - 90;
+            if (c < 0 && b < 0 && angle < 0)
+                return -90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
+            if (c > 0 && b > 0 && angle < 0)
+                // TODO: Вот здесь возможна ошибка, т.к. не удалось подобрать подходящий тест
+                return -90 + (lonfet - Math.Atan(c / b)) * 180 / Math.PI; 
 
             if (Math.Abs(b) < 0.00000001 && angle > 0)
                 return -90 + (lonfet + Math.Atan(c / b)) * 180 / Math.PI;
@@ -183,7 +194,7 @@ namespace GeodesicLibrary.Services
             if (c * angle > 0)
             {
                 if (c > 0)
-                    return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90;
+                    return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90; 
                 return 90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
             }
             else

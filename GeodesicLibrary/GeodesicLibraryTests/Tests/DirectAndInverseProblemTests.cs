@@ -12,22 +12,19 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void SimpleDirectInverseTest()
         {
-            //SimpleTest();
-            Assert.Inconclusive();
+            SimpleTest();
         }
 
         [TestMethod]
         public void IntersectionDirectInverseTest()
         {
-            //IntersectionTest();
-            Assert.Inconclusive();
+            IntersectionTest();
         }
 
         [TestMethod]
         public void Intersection180DirectInverseTest()
         {
-            //Intersection180Test();
-            Assert.Inconclusive();
+            Intersection180Test();
         }
 
         [TestMethod]
@@ -40,8 +37,8 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void IntersectionPolarDirectInverseTest()
         {
-            //IntersectionPolarTest();
-            Assert.Inconclusive();
+            IntersectionPolarTest();
+            //Assert.Inconclusive();
         }
        
         /// <summary>

@@ -1,131 +1,49 @@
 ﻿using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
-using GeodesicLibrary.Services;
-using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests.Tests
 {
-
     [TestClass]
-    public class IntersectTests
+    public class IntersectTests : Plan
     {
         [TestMethod]
-        public void SimpleDirectInverseTest()
+        public void SimpleIntersectTest()
         {
+            //SimpleTest();
             Assert.Inconclusive();
-            // Северо-Восточное полушарие
-            var pointSouthWest = new Point(15, 10);
-            var pointNorthWest = new Point(15, 25);
-            var pointSouthEast = new Point(30, 10);
-            var pointNorthEast = new Point(30, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+        }
 
-            // Северо-Западное полушарие
-            pointSouthWest = new Point(-45, 10);
-            pointNorthWest = new Point(-45, 25);
-            pointSouthEast = new Point(-30, 10);
-            pointNorthEast = new Point(-30, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
 
-            // Юго-Восточное полушарие
-            pointSouthWest = new Point(15, -40);
-            pointNorthWest = new Point(15, -25);
-            pointSouthEast = new Point(30, -40);
-            pointNorthEast = new Point(30, -25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+        [TestMethod]
+        public void IntersectionIntersectTest()
+        {
+            //IntersectionTest();
+            Assert.Inconclusive();
+        }
 
-            // Юго-Западное полушарие
-            pointSouthWest = new Point(-45, -40);
-            pointNorthWest = new Point(-45, -25);
-            pointSouthEast = new Point(-30, -40);
-            pointNorthEast = new Point(-30, -25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
+
+        [TestMethod]
+        public void Intersection180IntersectTest()
+        {
+           // Intersection180Test();
+            Assert.Inconclusive();
         }
 
         [TestMethod]
-        public void IntersectionDirectInverseTest()
+        public void LongLineIntersectTest()
         {
+            //LongLineTest();
             Assert.Inconclusive();
-            // Северное полушарие: пересечение нулевого меридиана
-            var pointSouthWest = new Point(-15, 10);
-            var pointNorthWest = new Point(-15, 25);
-            var pointSouthEast = new Point(15, 10);
-            var pointNorthEast = new Point(15, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Южное полушарие: пересечение нулевого меридиана
-            pointSouthWest = new Point(-15, -25);
-            pointNorthWest = new Point(-15, -10);
-            pointSouthEast = new Point(15, -25);
-            pointNorthEast = new Point(15, -10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Восточное полушарие: пересечение экватора
-            pointSouthWest = new Point(15, -10);
-            pointNorthWest = new Point(15, 10);
-            pointSouthEast = new Point(30, -10);
-            pointNorthEast = new Point(30, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Западное полушарие: пересечение экватора
-            pointSouthWest = new Point(-45, -10);
-            pointNorthWest = new Point(-45, 10);
-            pointSouthEast = new Point(-15, -10);
-            pointNorthEast = new Point(-15, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // Пересечение экватора и нелувого меридина
-            pointSouthWest = new Point(-15, -10);
-            pointNorthWest = new Point(-15, 10);
-            pointSouthEast = new Point(15, -10);
-            pointNorthEast = new Point(15, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
         }
 
         [TestMethod]
-        public void Intersection180DirectInverseTest()
+        public void IntersectionPolarAzimutTest()
         {
-            Assert.Inconclusive();
-            // TODO: Здесь вообще зависает
-            // В северном полушарии
-         /*   var pointSouthWest = new Point(-170, 10);
-            var pointNorthWest = new Point(-170, 25);
-            var pointSouthEast = new Point(170, 10);
-            var pointNorthEast = new Point(170, 25);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // В южном полушарии
-            pointSouthWest = new Point(-170, -25);
-            pointNorthWest = new Point(-170, -10);
-            pointSouthEast = new Point(170, -25);
-            pointNorthEast = new Point(170, -10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);
-
-            // На экваторе
-            pointSouthWest = new Point(-170, -10);
-            pointNorthWest = new Point(-170, 10);
-            pointSouthEast = new Point(170, -10);
-            pointNorthEast = new Point(170, 10);
-            AtDifferentAngles(pointSouthWest, pointNorthWest, pointSouthEast, pointNorthEast);*/
-        }
-
-        /// <summary>
-        /// Проверка правильности решения задач при условии пересечения полюса
-        /// </summary>
-        [TestMethod]
-        public void IntersectionPolarDirectInverseTest()
-        {
+            //IntersectionPolarTest();
             Assert.Inconclusive();
         }
 
-        private void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointSouthEast, Point pointNorthEast)
-        {
-            PointIntersectTest(pointNorthWest, pointSouthEast, pointNorthEast, pointSouthWest);
-            PointIntersectTest(pointNorthWest, pointSouthEast,pointSouthWest , pointNorthEast);
-            PointIntersectTest(pointSouthEast, pointNorthWest,  pointNorthEast, pointSouthWest);
-            PointIntersectTest(pointSouthEast, pointNorthWest, pointSouthWest, pointNorthEast); 
-        }
 
         /// <summary>
         /// Тестируется правильность вычисления точки пересечения двух ортодром
@@ -137,15 +55,9 @@ namespace GeodesicLibraryTests.Tests
         ///     - решаем обратную геодезическую задачу от начальной точки до найденной точки пересечения (для обоих ортодром)
         ///     - сравниваем азимуты, если точка пересечения найдена верно, азимуты не должны поменяться
         /// </remarks>
-        public void PointIntersectTest(Point point1, Point point2, Point point3, Point point4)
+        public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)
         {
-            PointIntersectTest(point1, point2, point3, point4, new Spheroid());
-            PointIntersectTest(point1, point2, point3, point4, new Ellipsoid());
-        }
-
-        private void PointIntersectTest(Point point1, Point point2, Point point3, Point point4, IEllipsoid ellipsoid)
-        {
-            var intersectService = new IntersectService(ellipsoid);
+            /*var intersectService = new IntersectService(ellipsoid);
             var inverseProblemService = new InverseProblemService(ellipsoid);
 
             var intersectCoord = intersectService.IntersectOrthodromic(point1,
@@ -160,7 +72,7 @@ namespace GeodesicLibraryTests.Tests
                 intersectCoord.Latitude));
 
             Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.00000001);
-            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);
+            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);*/
         }
     }
 }

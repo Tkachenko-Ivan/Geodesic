@@ -87,14 +87,14 @@ namespace GeodesicLibrary.Services
             lon2 = lon2 * 180 / Math.PI;
             lat2 = lat2 * 180 / Math.PI;
 
-            var a2 =
-                -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) *
-                180 / Math.PI;
-            a2 = Azimuth.AzimuthRecovery(new Point(lon2, lat2), coord, a2);
+            var point1 = IsPolisIntersect(coord, aDegree, s)
+                ? new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2)
+                : new Point(lon2, lat2);
 
-            return IsPolisIntersect(coord, aDegree, s)
-                ? new DirectProblemAnswer(new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2), a2)
-                : new DirectProblemAnswer(new Point(lon2, lat2), a2);
+            var a2 = -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(point1, coord, a2);
+
+            return new DirectProblemAnswer(point1, a2);
         }
 
         /// <summary>
@@ -116,15 +116,18 @@ namespace GeodesicLibrary.Services
             var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /
                                 (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) *
                      180 / Math.PI;
-            a2 = Azimuth.AzimuthRecovery(new Point(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI),
-                new Point(coord.Longitude, lat1 * 180 / Math.PI), a2);
+            
 
             lon2 = lon2 * 180 / Math.PI;
             lat2 = lat2 * 180 / Math.PI;
 
-            return IsPolisIntersect(coord, aDegree, s)
-                ? new DirectProblemAnswer(new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2), a2)
-                : new DirectProblemAnswer(new Point(lon2, lat2), a2);
+            var point1 = IsPolisIntersect(coord, aDegree, s)
+                ? new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2)
+                : new Point(lon2, lat2);
+
+            a2 = Azimuth.AzimuthRecovery(point1, new Point(coord.Longitude, lat1 * 180 / Math.PI), a2);
+
+            return  new DirectProblemAnswer(point1, a2);
         }
 
         /// <summary>

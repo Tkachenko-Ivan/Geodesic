@@ -32,6 +32,7 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void LongLineAzimutTest()
         {
+            //Tests(new Point(10, 10), new Point(140, 30), new Spheroid());
             //LongLineTest();
             Assert.Inconclusive();
         }

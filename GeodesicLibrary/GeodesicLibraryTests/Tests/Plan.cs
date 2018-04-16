@@ -19,6 +19,13 @@ namespace GeodesicLibraryTests.Tests
             var pointEast = new Point(30, 20);
             var pointSouthEast = new Point(30, 10);
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(100, 10);
+            pointNorthWest = new Point(100, 30);
+            pointNorth = new Point(110, 30);
+            pointNorthEast = new Point(120, 30);
+            pointEast = new Point(120, 20);
+            pointSouthEast = new Point(120, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
 
             // Северо-Западное полушарие
             pointSouthWest = new Point(-30, 10);
@@ -27,6 +34,13 @@ namespace GeodesicLibraryTests.Tests
             pointNorthEast = new Point(-10, 30);
             pointEast = new Point(-10, 20);
             pointSouthEast = new Point(-10, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-120, 10);
+            pointNorthWest = new Point(-120, 30);
+            pointNorth = new Point(-110, 30);
+            pointNorthEast = new Point(-100, 30);
+            pointEast = new Point(-100, 20);
+            pointSouthEast = new Point(-100, 10);
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
 
             // Юго-Восточное полушарие
@@ -37,6 +51,13 @@ namespace GeodesicLibraryTests.Tests
             pointEast = new Point(30, -20);
             pointSouthEast = new Point(30, -30);
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(100, -30);
+            pointNorthWest = new Point(100, -10);
+            pointNorth = new Point(110, -10);
+            pointNorthEast = new Point(120, -10);
+            pointEast = new Point(120, -20);
+            pointSouthEast = new Point(120, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
 
             // Юго-Западное полушарие
             pointSouthWest = new Point(-30, -30);
@@ -45,6 +66,13 @@ namespace GeodesicLibraryTests.Tests
             pointNorthEast = new Point(-10, -10);
             pointEast = new Point(-10, -20);
             pointSouthEast = new Point(-10, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-120, -30);
+            pointNorthWest = new Point(-120, -10);
+            pointNorth = new Point(-110, -10);
+            pointNorthEast = new Point(-100, -10);
+            pointEast = new Point(-100, -20);
+            pointSouthEast = new Point(-100, -30);
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
         }
 
@@ -147,7 +175,6 @@ namespace GeodesicLibraryTests.Tests
             pointEast = new Point(5, 5);
             pointSouthEast = new Point(5, -5);
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
-
         }
 
         /// <summary>

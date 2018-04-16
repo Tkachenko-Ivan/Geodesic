@@ -20,6 +20,11 @@ namespace GeodesicLibrary.Tools
             var lon2 = coord2.Longitude;
             var lat2 = coord2.Latitude;
 
+            if (Math.Abs(azimuth) < TOLERANCE && lon2 * lon1 < 0 && lat2 > 0 && lat1 > 0) // Через северный полюс
+                return 360;
+            if (Math.Abs(azimuth) < TOLERANCE && lon2 * lon1 < 0 && lat2 < 0 && lat1 < 0) // Через южный полюс
+                return 180;
+
             if (Math.Abs(lon1 - lon2) > TOLERANCE)
             {
                 bool reverse = false;
@@ -56,9 +61,9 @@ namespace GeodesicLibrary.Tools
             }
 
             if (Math.Abs(azimuth) < TOLERANCE && lat2 < lat1) // юг
-                azimuth = 180;
+                return 180;
             if (Math.Abs(azimuth) < TOLERANCE && lat2 > lat1) // север
-                azimuth = 360;
+                return 360;
 
             return Math.Abs(azimuth);
         }

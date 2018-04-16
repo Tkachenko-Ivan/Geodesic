@@ -31,6 +31,7 @@ namespace GeodesicLibrary.Services
         /// </summary>
         private DirectProblemAnswer DirectProblemEllipsoid(Point coord, double a1, double s)
         {
+            var aDegree = a1;
             a1 = a1 * Math.PI / 180;
 
             double u1 = Math.Atan((1 - _ellipsoid.F) * Math.Tan(coord.LatR));
@@ -74,22 +75,26 @@ namespace GeodesicLibrary.Services
 
             // Разность долгот
             var lamda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
-                              (Math.Cos(u1) * Math.Cos(sigma) - Math.Sin(u1) * Math.Sin(sigma) * Math.Cos(a1)));
+                                  (Math.Cos(u1) * Math.Cos(sigma) - Math.Sin(u1) * Math.Sin(sigma) * Math.Cos(a1)));
 
             double c = _ellipsoid.F / 16 * cosSqAlpha * (4 + _ellipsoid.F * (4 - 3 * cosSqAlpha));
 
             var l = lamda - (1 - c) * _ellipsoid.F * sinAlpha *
-                        (sigma +
-                         c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
+                    (sigma +
+                     c * Math.Sin(sigma) * (cos2SigmaM + c * Math.Cos(sigma) * (-1 + 2 * cos2SigmaM * cos2SigmaM)));
             var lon2 = -l + coord.LonR;
 
             lon2 = lon2 * 180 / Math.PI;
             lat2 = lat2 * 180 / Math.PI;
 
-            var a2 = -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) * 180 / Math.PI;
+            var a2 =
+                -Math.Atan(sinAlpha / (-Math.Sin(u1) * Math.Sin(sigma) + Math.Cos(u1) * Math.Cos(sigma) * Math.Cos(a1))) *
+                180 / Math.PI;
             a2 = Azimuth.AzimuthRecovery(new Point(lon2, lat2), coord, a2);
 
-            return new DirectProblemAnswer(new Point(lon2, lat2), a2);
+            return IsPolisIntersect(coord, aDegree, s)
+                ? new DirectProblemAnswer(new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2), a2)
+                : new DirectProblemAnswer(new Point(lon2, lat2), a2);
         }
 
         /// <summary>
@@ -97,6 +102,7 @@ namespace GeodesicLibrary.Services
         /// </summary>
         private DirectProblemAnswer DirectProblemSpheroid(Point coord, double a1, double s)
         {
+            var aDegree = a1;
             a1 = a1 * Math.PI / 180;
             var lat1 = coord.LatR;
 
@@ -104,14 +110,37 @@ namespace GeodesicLibrary.Services
             var lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(sigma) + Math.Cos(lat1) * Math.Sin(sigma) * Math.Cos(a1));
 
             var lambda = Math.Atan(Math.Sin(sigma) * Math.Sin(a1) /
-                         (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
+                                   (Math.Cos(sigma) * Math.Cos(lat1) - Math.Sin(sigma) * Math.Sin(lat1) * Math.Cos(a1)));
             var lon2 = -lambda + coord.LonR;
 
             var a2 = -Math.Atan(Math.Cos(lat1) * Math.Sin(a1) /
-                     (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) * 180 / Math.PI;
-            a2 = Azimuth.AzimuthRecovery(new Point(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI), new Point(coord.Longitude, lat1 * 180 / Math.PI), a2);
+                                (Math.Cos(lat1) * Math.Cos(sigma) * Math.Cos(a1) - Math.Sin(lat1) * Math.Sin(sigma))) *
+                     180 / Math.PI;
+            a2 = Azimuth.AzimuthRecovery(new Point(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI),
+                new Point(coord.Longitude, lat1 * 180 / Math.PI), a2);
 
-            return new DirectProblemAnswer(new Point(lon2 * 180 / Math.PI, lat2 * 180 / Math.PI), a2);
+            lon2 = lon2 * 180 / Math.PI;
+            lat2 = lat2 * 180 / Math.PI;
+
+            return IsPolisIntersect(coord, aDegree, s)
+                ? new DirectProblemAnswer(new Point(lon2 + (lon2 < 0 ? 180 : -180), lat2), a2)
+                : new DirectProblemAnswer(new Point(lon2, lat2), a2);
+        }
+
+        /// <summary>
+        /// А нет ли пересечения полюса?
+        /// </summary>
+        private bool IsPolisIntersect(Point coord, double aDegree, double s)
+        {
+            if (!(Math.Abs(aDegree - 360) < TOLERANCE) && !(Math.Abs(aDegree - 180) < TOLERANCE))
+                return false;
+            
+            // Расстояние до полюса
+            var dist =
+                new InverseProblemService(_ellipsoid).OrthodromicDistance(coord,
+                        new Point(coord.Longitude, Math.Abs(aDegree - 360) < TOLERANCE ? 90 : -90))
+                    .Distance;
+            return Math.Abs(dist) < s;
         }
     }
 }

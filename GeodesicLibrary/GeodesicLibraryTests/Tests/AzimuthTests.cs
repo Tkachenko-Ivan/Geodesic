@@ -39,15 +39,23 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void IntersectionPolarAzimutTest()
         {
-            //IntersectionPolarTest();
-            Assert.Inconclusive();
+            IntersectionPolarTest();
         }
 
         /// <summary>
         /// Проверка того как изменяется азимут при движении по прямой
         /// </summary>
         [TestMethod]
-        public void СhangeOfAzimutTest()
+        public void СhangeOfAzimutLineTest()
+        {
+            Assert.Inconclusive();
+        }
+
+        /// <summary>
+        /// Изменение азимута при движении по окружности
+        /// </summary>
+        [TestMethod]
+        public void СhangeOfAzimutCircleTest()
         {
             Assert.Inconclusive();
         }

@@ -225,16 +225,95 @@ namespace GeodesicLibraryTests.Tests
         protected void LongLineTest()
         {
             // Северное через нулевой меридиан
-
+            var pointSouthWest = new Point(-50, 10);
+            var pointNorthWest = new Point(-50, 30);
+            var pointNorth = new Point(20, 30);
+            var pointNorthEast = new Point(80, 30);
+            var pointEast = new Point(80, 20);
+            var pointSouthEast = new Point(80, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-80, 10);
+            pointNorthWest = new Point(-80, 30);
+            pointNorth = new Point(-10, 30);
+            pointNorthEast = new Point(50, 30);
+            pointEast = new Point(50, 20);
+            pointSouthEast = new Point(50, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
             // Северное через 180ый меридиан
-
+            pointSouthWest = new Point(145, 10);
+            pointNorthWest = new Point(145, 30);
+            pointNorth = new Point(-175, 30);
+            pointNorthEast = new Point(-135, 30);
+            pointEast = new Point(-135, 20);
+            pointSouthEast = new Point(-135, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(135, 10);
+            pointNorthWest = new Point(135, 30);
+            pointNorth = new Point(175, 30);
+            pointNorthEast = new Point(-145, 30);
+            pointEast = new Point(-145, 20);
+            pointSouthEast = new Point(-145, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
             // Южное через нулевой меридиан
-
+            pointSouthWest = new Point(-50, -30);
+            pointNorthWest = new Point(-50, -10);
+            pointNorth = new Point(20, -10);
+            pointNorthEast = new Point(80, -10);
+            pointEast = new Point(80, -20);
+            pointSouthEast = new Point(80, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-80, -30);
+            pointNorthWest = new Point(-80, -10);
+            pointNorth = new Point(-10, -10);
+            pointNorthEast = new Point(50, -10);
+            pointEast = new Point(50, -20);
+            pointSouthEast = new Point(50, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
             // Южное через 180ый меридиан
-
-            // Восточное
-
-            // Западное
+            pointSouthWest = new Point(145, -30);
+            pointNorthWest = new Point(145, -10);
+            pointNorth = new Point(-175, -10);
+            pointNorthEast = new Point(-135, -10);
+            pointEast = new Point(-135, -20);
+            pointSouthEast = new Point(-135, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(135, -30);
+            pointNorthWest = new Point(135, -10);
+            pointNorth = new Point(175, -10);
+            pointNorthEast = new Point(-145, -10);
+            pointEast = new Point(-145, -20);
+            pointSouthEast = new Point(-145, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            // Восточное через экватор
+            pointSouthWest = new Point(10, -55);
+            pointNorthWest = new Point(10, 45);
+            pointNorth = new Point(20, 45);
+            pointNorthEast = new Point(30, 45);
+            pointEast = new Point(30, -5);
+            pointSouthEast = new Point(30, -55);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(10, -45);
+            pointNorthWest = new Point(10, 55);
+            pointNorth = new Point(20, 55);
+            pointNorthEast = new Point(30, 55);
+            pointEast = new Point(30, 5);
+            pointSouthEast = new Point(30, -45);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            // Западное через экватор
+            pointSouthWest = new Point(-30, -55);
+            pointNorthWest = new Point(-30, 45);
+            pointNorth = new Point(-20, 45);
+            pointNorthEast = new Point(-10, 45);
+            pointEast = new Point(-10, -5);
+            pointSouthEast = new Point(-10, -55);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-30, -45);
+            pointNorthWest = new Point(-30, 55);
+            pointNorth = new Point(-20, 55);
+            pointNorthEast = new Point(-10, 55);
+            pointEast = new Point(-10, 5);
+            pointSouthEast = new Point(-10, -45);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
         }
 
         /// <summary>
@@ -242,6 +321,25 @@ namespace GeodesicLibraryTests.Tests
         /// </summary>
         protected void IntersectionPolarTest()
         {
+            // Северный полюс
+            var point1 = new Point(50, 70);
+            var point2 = new Point(-130, 50);
+            Tests(point1, point2, new Spheroid());
+            Tests(point1, point2, new Ellipsoid());
+            point1 = new Point(120, 70);
+            point2 = new Point(-60, 50);
+            Tests(point1, point2, new Spheroid());
+            Tests(point1, point2, new Ellipsoid());
+
+            // Южный полюс
+            point1 = new Point(50, -70);
+            point2 = new Point(-130, -50);
+            Tests(point1, point2, new Spheroid());
+            Tests(point1, point2, new Ellipsoid());
+            point1 = new Point(120, -70);
+            point2 = new Point(-60, -50);
+            Tests(point1, point2, new Spheroid());
+            Tests(point1, point2, new Ellipsoid());
         }
 
         /// <summary>

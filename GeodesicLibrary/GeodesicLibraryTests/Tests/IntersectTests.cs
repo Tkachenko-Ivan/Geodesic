@@ -27,7 +27,6 @@ namespace GeodesicLibraryTests.Tests
         {
             //Intersection180Test();
             Assert.Inconclusive();
-            // Свероиды выполняется с ошибкой, а эллипсоид зависает
         }
 
         [TestMethod]

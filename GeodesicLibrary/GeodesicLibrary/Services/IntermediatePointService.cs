@@ -183,8 +183,7 @@ namespace GeodesicLibrary.Services
             if (c < 0 && b < 0 && angle < 0)
                 return -90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
             if (c > 0 && b > 0 && angle < 0)
-                // TODO: Вот здесь возможна ошибка, т.к. не удалось подобрать подходящий тест
-                return -90 + (lonfet - Math.Atan(c / b)) * 180 / Math.PI; 
+                return 90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
 
             if (Math.Abs(b) < 0.00000001 && angle > 0)
                 return -90 + (lonfet + Math.Atan(c / b)) * 180 / Math.PI;

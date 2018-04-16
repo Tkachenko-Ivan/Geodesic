@@ -35,29 +35,43 @@ namespace GeodesicLibrary.Services
         {
             // Сфероид
             if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
-            {
-                double dl1 = Math.Sin(coord12.LonR - coord11.LonR);
-                double dl2 = Math.Sin(coord22.LonR - coord21.LonR);
-
-                // Первая ортодрома
-                double a1S = Math.Tan(coord11.LatR) / dl1 * Math.Sin(coord12.LonR);
-                double a2S = Math.Tan(coord12.LatR) / dl1 * Math.Cos(coord11.LonR);
-                double a1Ss = Math.Tan(coord11.LatR) / dl1 * Math.Cos(coord12.LonR);
-                double a2Ss = Math.Tan(coord12.LatR) / dl1 * Math.Sin(coord11.LonR);
-
-                // Вторая ортодрома
-                double a3S = Math.Tan(coord21.LatR) / dl2 * Math.Sin(coord22.LonR);
-                double a4S = Math.Tan(coord22.LatR) / dl2 * Math.Cos(coord21.LonR);
-                double a3Ss = Math.Tan(coord21.LatR) / dl2 * Math.Cos(coord22.LonR);
-                double a4Ss = Math.Tan(coord22.LatR) / dl2 * Math.Sin(coord21.LonR);
-
-                double b1 = a1S - a2Ss - a3S + a4Ss;
-                double b2 = a2S - a1Ss + a3Ss - a4S;
-
-                return Math.Atan(-b1 / b2) * 180 / Math.PI;
-            }
-
+                return SpheroidLongitude(coord11, coord12, coord21, coord22);
             // Эллипсоид вращения
+            return EllipsoidLongitude(coord11, coord12, coord21, coord22);
+        }
+
+        private double SpheroidLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
+        {
+            double dl1 = Math.Sin(coord12.LonR - coord11.LonR);
+            double dl2 = Math.Sin(coord22.LonR - coord21.LonR);
+
+            // Первая ортодрома
+            double a1S = Math.Tan(coord11.LatR) / dl1 * Math.Sin(coord12.LonR);
+            double a2S = Math.Tan(coord12.LatR) / dl1 * Math.Cos(coord11.LonR);
+            double a1Ss = Math.Tan(coord11.LatR) / dl1 * Math.Cos(coord12.LonR);
+            double a2Ss = Math.Tan(coord12.LatR) / dl1 * Math.Sin(coord11.LonR);
+
+            // Вторая ортодрома
+            double a3S = Math.Tan(coord21.LatR) / dl2 * Math.Sin(coord22.LonR);
+            double a4S = Math.Tan(coord22.LatR) / dl2 * Math.Cos(coord21.LonR);
+            double a3Ss = Math.Tan(coord21.LatR) / dl2 * Math.Cos(coord22.LonR);
+            double a4Ss = Math.Tan(coord22.LatR) / dl2 * Math.Sin(coord21.LonR);
+
+            double b1 = a1S - a2Ss - a3S + a4Ss;
+            double b2 = a2S - a1Ss + a3Ss - a4S;
+
+            // TODO: Как-то странно, надо наверно задавать черезе отношение b1 к b2
+            var answer = Math.Atan(-b1 / b2) * 180 / Math.PI;
+            if (answer < 0 && coord11.Longitude > 0 && coord12.Longitude > 0)
+                return 180 + answer;
+            if (answer > 0 && coord11.Longitude < 0 && coord12.Longitude < 0)
+                return -180 + answer;
+
+            return answer;
+        }
+
+        private double EllipsoidLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
+        {
             var longs =
                 new List<double> { coord11.Longitude, coord12.Longitude, coord21.Longitude, coord22.Longitude }
                     .OrderBy(

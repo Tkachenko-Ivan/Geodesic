@@ -1,5 +1,6 @@
 ﻿using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
+using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests.Tests
@@ -10,24 +11,23 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void SimpleIntersectTest()
         {
-            //SimpleTest();
-            Assert.Inconclusive();
+            SimpleTest();
         }
 
 
         [TestMethod]
         public void IntersectionIntersectTest()
         {
-            //IntersectionTest();
-            Assert.Inconclusive();
+            IntersectionTest();
         }
 
 
         [TestMethod]
         public void Intersection180IntersectTest()
         {
-           // Intersection180Test();
+            //Intersection180Test();
             Assert.Inconclusive();
+            // Свероиды выполняется с ошибкой, а эллипсоид зависает
         }
 
         [TestMethod]
@@ -44,6 +44,29 @@ namespace GeodesicLibraryTests.Tests
             Assert.Inconclusive();
         }
 
+        public override void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointNorth,
+            Point pointNorthEast,
+            Point pointEast, Point pointSouthEast, IEllipsoid ellipsoid)
+        {
+            Tests(pointSouthWest, pointNorth, pointNorthWest, pointEast, ellipsoid);
+            Tests(pointNorth, pointSouthWest, pointNorthWest, pointEast, ellipsoid);
+            Tests(pointSouthWest, pointNorth, pointEast, pointNorthWest, ellipsoid);
+            Tests(pointNorth, pointSouthWest, pointEast, pointNorthWest, ellipsoid);
+
+            Tests(pointSouthWest, pointNorthEast, pointNorthWest, pointEast, ellipsoid);
+            Tests(pointNorthEast, pointSouthWest, pointNorthWest, pointEast, ellipsoid);
+            Tests(pointSouthWest, pointNorthEast, pointEast, pointNorthWest, ellipsoid);
+            Tests(pointNorthEast, pointSouthWest, pointEast, pointNorthWest, ellipsoid);
+            Tests(pointSouthWest, pointNorthEast, pointNorth, pointSouthEast, ellipsoid);
+            Tests(pointNorthEast, pointSouthWest, pointNorth, pointSouthEast, ellipsoid);
+            Tests(pointSouthWest, pointNorthEast, pointSouthEast, pointNorth, ellipsoid);
+            Tests(pointNorthEast, pointSouthWest, pointSouthEast, pointNorth, ellipsoid);
+
+            Tests(pointSouthWest, pointEast, pointNorth, pointSouthEast, ellipsoid);
+            Tests(pointEast, pointSouthWest, pointNorth, pointSouthEast, ellipsoid);
+            Tests(pointSouthWest, pointEast, pointSouthEast, pointNorth, ellipsoid);
+            Tests(pointEast, pointSouthWest, pointSouthEast, pointNorth, ellipsoid);
+        }
 
         /// <summary>
         /// Тестируется правильность вычисления точки пересечения двух ортодром
@@ -55,13 +78,12 @@ namespace GeodesicLibraryTests.Tests
         ///     - решаем обратную геодезическую задачу от начальной точки до найденной точки пересечения (для обоих ортодром)
         ///     - сравниваем азимуты, если точка пересечения найдена верно, азимуты не должны поменяться
         /// </remarks>
-        public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)
+        public void Tests(Point point1, Point point2, Point point3, Point point4, IEllipsoid ellipsoid)
         {
-            /*var intersectService = new IntersectService(ellipsoid);
+            var intersectService = new IntersectService(ellipsoid);
             var inverseProblemService = new InverseProblemService(ellipsoid);
 
-            var intersectCoord = intersectService.IntersectOrthodromic(point1,
-                point2, point3, point4);
+            var intersectCoord = intersectService.IntersectOrthodromic(point1, point2, point3, point4);
 
             var firstOrtodrom = inverseProblemService.OrthodromicDistance(point1, point2);
             var secondOrtodrom = inverseProblemService.OrthodromicDistance(point3, point4);
@@ -72,7 +94,13 @@ namespace GeodesicLibraryTests.Tests
                 intersectCoord.Latitude));
 
             Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.00000001);
-            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);*/
+            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);
+        }
+
+        public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)
+        {
+            // Не используется и не должен
+            throw new System.NotImplementedException();
         }
     }
 }

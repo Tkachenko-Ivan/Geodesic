@@ -28,10 +28,46 @@ namespace GeodesicLibrary.Services
         /// <returns>Широта промежуточной точки</returns>
         public double GetLatitude(double longitude, Point coord1, Point coord2)
         {
-            longitude *= Math.PI / 180;
+            // Разные знаки - т.е. разные полушария
+            if (coord1.Longitude * coord2.Longitude < 0)
+            {
+                if (Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
+                    throw new Exception("При переходе через полюс, невозможно однозначно определить широту по долготе");
+
+                var min = Math.Min(coord1.Longitude, coord2.Longitude);
+                var max = Math.Max(coord1.Longitude, coord2.Longitude);
+                if (180 - max + 180 + min < 180)
+                {
+                    // Ближе через 180ый мередиан
+                    // Проводим инверсию и решаем инвертированную задачу
+                    double res = coord1.Longitude < 0
+                        ? GetLatitude(longitude < 0 ? longitude + 180 : longitude - 180, new Point(coord1.Longitude + 180, coord1.Latitude),
+                            new Point(coord2.Longitude - 180, coord2.Latitude))
+                        : GetLatitude(longitude < 0 ? longitude + 180 : longitude - 180, new Point(coord1.Longitude - 180, coord1.Latitude),
+                            new Point(coord2.Longitude + 180, coord2.Latitude));
+                    // Корректируем инверсию
+                    return res;
+                }
+            }
+
+            // Приводим задачу к диапазону координат от -90 до +90
+            if (coord1.Longitude < -90 || coord2.Longitude < -90)
+            {
+                return
+                    GetLatitude(longitude + 90, new Point(coord1.Longitude + 90, coord1.Latitude),
+                        new Point(coord2.Longitude + 90, coord2.Latitude));
+            }
+            if (coord1.Longitude > 90 || coord2.Longitude > 90)
+            {
+                return
+                    GetLatitude(longitude - 90, new Point(coord1.Longitude - 90, coord1.Latitude),
+                        new Point(coord2.Longitude - 90, coord2.Latitude));
+            }
+
+            // Видимо задача и так в нужном диапазоне
             return Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE
-                ? GetLatitudeSpheroid(longitude, coord1, coord2)
-                : GetLatitudeEllipsoid(longitude, coord1, coord2);
+                ? GetLatitudeSpheroid(longitude * Math.PI / 180, coord1, coord2)
+                : GetLatitudeEllipsoid(longitude * Math.PI / 180, coord1, coord2);
         }
 
         /// <summary>
@@ -43,10 +79,46 @@ namespace GeodesicLibrary.Services
         /// <returns>Долгота промежуточной точки</returns>
         public double GetLongitude(double latitude, Point coord1, Point coord2)
         {
-            latitude *= Math.PI / 180;
+            // Разные знаки - т.е. разные полушария
+            if (coord1.Longitude * coord2.Longitude < 0)
+            {
+                if (Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
+                    throw new Exception("При переходе через полюс, невозможно однозначно определить долготу по широте");
+
+                var min = Math.Min(coord1.Longitude, coord2.Longitude);
+                var max = Math.Max(coord1.Longitude, coord2.Longitude);
+                if (180 - max + 180 + min < 180)
+                {
+                    // Ближе через 180ый мередиан
+                    // Проводим инверсию и решаем инвертированную задачу
+                    double res = coord1.Longitude < 0
+                        ? GetLongitude(latitude, new Point(coord1.Longitude + 180, coord1.Latitude),
+                            new Point(coord2.Longitude - 180, coord2.Latitude))
+                        : GetLongitude(latitude, new Point(coord1.Longitude - 180, coord1.Latitude),
+                            new Point(coord2.Longitude + 180, coord2.Latitude));
+                    // Корректируем инверсию
+                    return res > 0 ? res - 180 : 180 + res;
+                }
+            }
+
+            // Приводим задачу к диапазону координат от -90 до +90
+            if (coord1.Longitude < -90 || coord2.Longitude < -90)
+            {
+                return
+                    GetLongitude(latitude, new Point(coord1.Longitude + 90, coord1.Latitude),
+                        new Point(coord2.Longitude + 90, coord2.Latitude)) - 90;
+            }
+            if (coord1.Longitude > 90 || coord2.Longitude > 90)
+            {
+                return
+                    GetLongitude(latitude, new Point(coord1.Longitude - 90, coord1.Latitude),
+                        new Point(coord2.Longitude - 90, coord2.Latitude)) + 90;
+            }
+
+            // Видимо задача и так в нужном диапазоне
             return Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE
-                ? GetLongitudeSpheroid(latitude, coord1, coord2)
-                : GetLongitudeEllipsoid(latitude, coord1, coord2);
+                ? GetLongitudeSpheroid(latitude * Math.PI / 180, coord1, coord2)
+                : GetLongitudeEllipsoid(latitude * Math.PI / 180, coord1, coord2);
         }
 
         private double GetLatitudeSpheroid(double longitude, Point coord1, Point coord2)
@@ -81,52 +153,11 @@ namespace GeodesicLibrary.Services
             return coordM.Latitude;
         }
 
-        private double GetLongitudeSpheroid(double latitude, Point coord1, Point coord2)
-        {
-            // Разные знаки - т.е. разные полушария
-            if (coord1.Longitude * coord2.Longitude < 0)
-            {
-                var min = Math.Min(coord1.Longitude, coord2.Longitude);
-                var max = Math.Max(coord1.Longitude, coord2.Longitude);
-                if (180 - max + 180 + min < 180)
-                {
-                    // Ближе через 180ый мередиан
-                    // Проводим инверсию и решаем инвертированную задачу
-                    double res = coord1.Longitude < 0
-                        ? GetLongitudeSpheroid(latitude, new Point(coord1.Longitude + 180, coord1.Latitude),
-                            new Point(coord2.Longitude - 180, coord2.Latitude))
-                        : GetLongitudeSpheroid(latitude, new Point(coord1.Longitude - 180, coord1.Latitude),
-                            new Point(coord2.Longitude + 180, coord2.Latitude));
-                    // Корректируем инверсию
-                    return res > 0 ? res - 180 : 180 + res;
-                }
-            }
-
-            // Приводим задачу к диапазону координат от -90 до +90
-            if (coord1.Longitude < -90 || coord2.Longitude < -90)
-            {
-                var delta = Math.Abs(Math.Min(coord1.Longitude, coord2.Longitude)) - 90;
-                return
-                    GetLonSpheroid(latitude, new Point(coord1.Longitude + delta, coord1.Latitude),
-                        new Point(coord2.Longitude + delta, coord2.Latitude)) - delta;
-            }
-            if (coord1.Longitude > 90 || coord2.Longitude > 90)
-            {
-                var delta = Math.Max(coord1.Longitude, coord2.Longitude) - 90;
-                return
-                    GetLonSpheroid(latitude, new Point(coord1.Longitude - delta, coord1.Latitude),
-                        new Point(coord2.Longitude - delta, coord2.Latitude)) + delta;
-            }
-
-            // Видимо задача и так в нужном диапазоне
-            return GetLonSpheroid(latitude, coord1, coord2);
-        }
-
         /// <summary>
         /// Определяет долготу промежуточной точки.
         /// Работает в диапазоне от -90 до +90 для долготы.
         /// </summary>
-        private double GetLonSpheroid(double latitude, Point coord1, Point coord2)
+        private double GetLongitudeSpheroid(double latitude, Point coord1, Point coord2)
         {
             double a1 = Math.Tan(coord1.LatR) / Math.Sin(coord2.LonR - coord1.LonR);
             double a2 = Math.Tan(coord2.LatR) / Math.Sin(coord2.LonR - coord1.LonR);
@@ -188,7 +219,7 @@ namespace GeodesicLibrary.Services
         }
 
         /// <summary>
-        /// Проверяет утвержение о том, что временное значение находитя между первым и вторым
+        /// Проверяет утвержение о том, что временное значение находится между первым и вторым
         /// </summary>
         /// <param name="first">Первое значение</param>
         /// <param name="second">Второе значение</param>

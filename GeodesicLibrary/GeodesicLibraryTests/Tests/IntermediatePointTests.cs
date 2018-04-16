@@ -2,7 +2,7 @@
 using GeodesicLibrary.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests.Tests.IntermediatePoint
+namespace GeodesicLibraryTests.Tests
 {
     [TestClass]
     public class IntermediatePointTests : Plan

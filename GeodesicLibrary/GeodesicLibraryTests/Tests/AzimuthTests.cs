@@ -1,10 +1,9 @@
-﻿using System;
-using GeodesicLibrary.Infrastructure;
+﻿using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
 using GeodesicLibrary.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GeodesicLibraryTests.Tests.Azimuth
+namespace GeodesicLibraryTests.Tests
 {
     [TestClass]
     public class AzimutTests : Plan
@@ -20,16 +19,14 @@ namespace GeodesicLibraryTests.Tests.Azimuth
         [TestMethod]
         public void IntersectionAzimutTest()
         {
-            //IntersectionTest();
-            Assert.Inconclusive();
+            IntersectionTest();
         }
 
 
         [TestMethod]
         public void Intersection180AzimutTest()
         {
-            //Intersection180Test();
-            Assert.Inconclusive();
+            Intersection180Test();
         }
 
         [TestMethod]
@@ -52,10 +49,8 @@ namespace GeodesicLibraryTests.Tests.Azimuth
         [TestMethod]
         public void СhangeOfAzimutTest()
         {
-            // TODO: доделать когда разберусь с прямой геодезической задачей
             Assert.Inconclusive();
         }
-
 
         /// <summary>
         /// Тестируется правильность определения азимута

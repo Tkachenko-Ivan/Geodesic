@@ -17,6 +17,10 @@ namespace GeodesicLibrary.Model
         public Point(double lon, double lat)
         {
             var message = "";
+            if (lon > 180)
+                lon = -(360 - lon);
+            if (lon < -180)
+                lon = 360 + lon;
             if (Math.Abs(lon) > 180)
                 message += $"Значение долготы должно находиться в интервале [-180;180], текущее значение долготы: {lon}.";
             if (Math.Abs(lat) > 90)

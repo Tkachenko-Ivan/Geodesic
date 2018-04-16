@@ -20,30 +20,40 @@ namespace GeodesicLibrary.Tools
             var lon2 = coord2.Longitude;
             var lat2 = coord2.Latitude;
 
-            // ТОDO: Изменение полушария с северного на южное или наоборот
-            if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 < lon2) // запад
+            if (Math.Abs(lon1 - lon2) > TOLERANCE)
             {
-                if (lat1 > 0) // Северное полушарие
-                    return 360 - Math.Abs(azimuth);
-                else // Южное полушарие
+                bool reverse = false;
+                if (lon1 * lon2 < 0)
+                    // Одна из координат в западном полушарии, а вторая в восточном
+                    if (Math.Abs(lon1) + Math.Abs(lon2) > 180)
+                        reverse = true;
+
+                var direct = lon1 < lon2 ? !reverse : reverse;
+
+                if (Math.Abs(lat1 - lat2) < TOLERANCE && direct)
+                {
+                    if (lat1 > 0) // Северное полушарие
+                        return 360 - Math.Abs(azimuth);
+                    // Южное полушарие
                     return 180 + Math.Abs(azimuth);
-            }
-            if (Math.Abs(lat1 - lat2) < TOLERANCE && lon1 > lon2) // восток
-            {
-                if (lat1 > 0) // Северное полушарие
+                }
+                if (Math.Abs(lat1 - lat2) < TOLERANCE && !direct)
+                {
+                    if (lat1 > 0) // Северное полушарие
+                        return Math.Abs(azimuth);
+                    // Южное полушарие
+                    return 180 - Math.Abs(azimuth);
+                }
+
+                if (direct && lat2 > lat1)
+                    return 360 - Math.Abs(azimuth);
+                if (direct && lat2 < lat1)
+                    return Math.Abs(azimuth) + 180;
+                if (!direct && lat2 > lat1)
                     return Math.Abs(azimuth);
-                else // Южное полушарие
+                if (!direct && lat2 < lat1)
                     return 180 - Math.Abs(azimuth);
             }
-
-            if (lon2 > lon1 && lat2 > lat1) // северо-запад
-                return 360 - Math.Abs(azimuth);
-            if (lon2 > lon1 && lat2 < lat1) // юго-запад
-                return Math.Abs(azimuth) + 180;
-            if (lon2 < lon1 && lat2 > lat1) // северо-восток
-                return Math.Abs(azimuth);
-            if (lon2 < lon1 && lat2 < lat1) // юго-восток
-                return 180 - Math.Abs(azimuth);
 
             if (Math.Abs(azimuth) < TOLERANCE && lat2 < lat1) // юг
                 azimuth = 180;

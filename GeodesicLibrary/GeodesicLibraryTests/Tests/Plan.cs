@@ -54,6 +54,100 @@ namespace GeodesicLibraryTests.Tests
         /// </summary>
         protected void IntersectionTest()
         {
+            // Пересечение нулевого меридиана в Северном полушарии
+            var pointSouthWest = new Point(-5, 10);
+            var pointNorthWest = new Point(-5, 30);
+            var pointNorth = new Point(5, 30);
+            var pointNorthEast = new Point(15, 30);
+            var pointEast = new Point(15, 20);
+            var pointSouthEast = new Point(15, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-15, 10);
+            pointNorthWest = new Point(-15, 30);
+            pointNorth = new Point(-5, 30);
+            pointNorthEast = new Point(5, 30);
+            pointEast = new Point(5, 20);
+            pointSouthEast = new Point(5, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение нулевого меридиана в Южном полушарии
+            pointSouthWest = new Point(-5, -30);
+            pointNorthWest = new Point(-5, -10);
+            pointNorth = new Point(5, -10);
+            pointNorthEast = new Point(15, -10);
+            pointEast = new Point(15, -20);
+            pointSouthEast = new Point(15, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-15, -30);
+            pointNorthWest = new Point(-15, -10);
+            pointNorth = new Point(-5, -10);
+            pointNorthEast = new Point(5, -10);
+            pointEast = new Point(5, -20);
+            pointSouthEast = new Point(5, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение экватора в Восточном полушарии
+            pointSouthWest = new Point(10, -15);
+            pointNorthWest = new Point(10, 5);
+            pointNorth = new Point(20, 5);
+            pointNorthEast = new Point(30, 5);
+            pointEast = new Point(30, -5);
+            pointSouthEast = new Point(30, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(10, -5);
+            pointNorthWest = new Point(10, 15);
+            pointNorth = new Point(20, 15);
+            pointNorthEast = new Point(30, 15);
+            pointEast = new Point(30, 5);
+            pointSouthEast = new Point(30, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение экватора в Западном полушарии
+            pointSouthWest = new Point(-30, -15);
+            pointNorthWest = new Point(-30, 5);
+            pointNorth = new Point(-20, 5);
+            pointNorthEast = new Point(-10, 5);
+            pointEast = new Point(-10, -5);
+            pointSouthEast = new Point(-10, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-30, -5);
+            pointNorthWest = new Point(-30, 15);
+            pointNorth = new Point(-20, 15);
+            pointNorthEast = new Point(-10, 15);
+            pointEast = new Point(-10, 5);
+            pointSouthEast = new Point(-10, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение экватора и нулевого меридиана
+            pointSouthWest = new Point(-5, -15);
+            pointNorthWest = new Point(-5, 5);
+            pointNorth = new Point(5, 5);
+            pointNorthEast = new Point(15, 5);
+            pointEast = new Point(15, -5);
+            pointSouthEast = new Point(15, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-5, -5);
+            pointNorthWest = new Point(-5, 15);
+            pointNorth = new Point(5, 15);
+            pointNorthEast = new Point(15, 15);
+            pointEast = new Point(15, 5);
+            pointSouthEast = new Point(15, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-15, -15);
+            pointNorthWest = new Point(-15, 5);
+            pointNorth = new Point(-5, 5);
+            pointNorthEast = new Point(5, 5);
+            pointEast = new Point(5, -5);
+            pointSouthEast = new Point(5, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(-15, -5);
+            pointNorthWest = new Point(-15, 15);
+            pointNorth = new Point(-5, 15);
+            pointNorthEast = new Point(5, 15);
+            pointEast = new Point(5, 5);
+            pointSouthEast = new Point(5, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
         }
 
         /// <summary>
@@ -61,6 +155,67 @@ namespace GeodesicLibraryTests.Tests
         /// </summary>
         protected void Intersection180Test()
         {
+            // Пересечение 180 меридиана в Северном полушарии
+            var pointSouthWest = new Point(175, 10);
+            var pointNorthWest = new Point(175, 30);
+            var pointNorth = new Point(-175, 30);
+            var pointNorthEast = new Point(-165, 30);
+            var pointEast = new Point(-165, 20);
+            var pointSouthEast = new Point(-165, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(165, 10);
+            pointNorthWest = new Point(165, 30);
+            pointNorth = new Point(175, 30);
+            pointNorthEast = new Point(-175, 30);
+            pointEast = new Point(-175, 20);
+            pointSouthEast = new Point(-175, 10);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение 180 меридиана в Южном полушарии
+            pointSouthWest = new Point(175, -30);
+            pointNorthWest = new Point(175, -10);
+            pointNorth = new Point(-175, -10);
+            pointNorthEast = new Point(-165, -10);
+            pointEast = new Point(-165, -20);
+            pointSouthEast = new Point(-165, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(165, -30);
+            pointNorthWest = new Point(165, -10);
+            pointNorth = new Point(175, -10);
+            pointNorthEast = new Point(-175, -10);
+            pointEast = new Point(-175, -20);
+            pointSouthEast = new Point(-175, -30);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+
+            // Пересечение 180 меридиана У Экватора
+            pointSouthWest = new Point(175, -15);
+            pointNorthWest = new Point(175, 5);
+            pointNorth = new Point(-175, 5);
+            pointNorthEast = new Point(-165, 5);
+            pointEast = new Point(-165, -5);
+            pointSouthEast = new Point(-165, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(165, -15);
+            pointNorthWest = new Point(165, 5);
+            pointNorth = new Point(175, 5);
+            pointNorthEast = new Point(-175, 5);
+            pointEast = new Point(-175, -5);
+            pointSouthEast = new Point(-175, -15);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(175, -5);
+            pointNorthWest = new Point(175, 15);
+            pointNorth = new Point(-175, 15);
+            pointNorthEast = new Point(-165, 15);
+            pointEast = new Point(-165, 5);
+            pointSouthEast = new Point(-165, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
+            pointSouthWest = new Point(165, -5);
+            pointNorthWest = new Point(165, 15);
+            pointNorth = new Point(175, 15);
+            pointNorthEast = new Point(-175, 15);
+            pointEast = new Point(-175, 5);
+            pointSouthEast = new Point(-175, -5);
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast);
         }
 
         /// <summary>
@@ -69,6 +224,17 @@ namespace GeodesicLibraryTests.Tests
         /// </summary>
         protected void LongLineTest()
         {
+            // Северное через нулевой меридиан
+
+            // Северное через 180ый меридиан
+
+            // Южное через нулевой меридиан
+
+            // Южное через 180ый меридиан
+
+            // Восточное
+
+            // Западное
         }
 
         /// <summary>

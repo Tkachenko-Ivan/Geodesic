@@ -1,6 +1,7 @@
 ﻿using GeodesicLibrary.Infrastructure;
 using GeodesicLibrary.Model;
 using GeodesicLibrary.Services;
+using GeodesicLibraryTests.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GeodesicLibraryTests.Tests
@@ -25,22 +26,28 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void Intersection180IntersectTest()
         {
-            //Intersection180Test();
-            Assert.Inconclusive();
+            Intersection180Test();
         }
 
         [TestMethod]
         public void LongLineIntersectTest()
         {
-            //LongLineTest();
-            Assert.Inconclusive();
+            LongLineTest();
+            //Assert.Inconclusive();
         }
 
         [TestMethod]
         public void IntersectionPolarAzimutTest()
         {
-            //IntersectionPolarTest();
             Assert.Inconclusive();
+
+            // Северный полюс
+            var point11 = new Point(50, 70);
+            var point12 = new Point(-130, 50);
+            var point21 = new Point(120, 70);
+            var point22 = new Point(-60, 50);
+            Tests(point11, point12, point21, point22, new Spheroid());
+            Tests(point11, point12, point21, point22, new Ellipsoid());
         }
 
         public override void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointNorth,

@@ -25,6 +25,25 @@ namespace GeodesicLibrary.Services
 
         public Point IntersectOrthodromic(Point coord11, Point coord12, Point coord21, Point coord22)
         {
+            // Разные знаки - т.е. разные полушария
+            if (coord11.Longitude * coord12.Longitude < 0 || coord21.Longitude * coord22.Longitude < 0)
+            {
+                var min = Math.Min(Math.Min(coord11.Longitude, coord12.Longitude), Math.Min(coord21.Longitude, coord22.Longitude));
+                var max = Math.Max(Math.Max(coord11.Longitude, coord12.Longitude), Math.Max(coord21.Longitude, coord22.Longitude));
+                if (180 - max + 180 + min < 180)
+                {
+                    // Ближе через 180ый мередиан
+                    // Проводим инверсию и решаем инвертированную задачу
+                    var res = coord11.Longitude < 0 || coord21.Longitude < 0
+                        ? IntersectOrthodromic(new Point(coord11.Longitude + 180, coord11.Latitude),
+                            new Point(coord12.Longitude - 180, coord12.Latitude), new Point(coord21.Longitude - 180, coord21.Latitude), new Point(coord22.Longitude - 180, coord22.Latitude))
+                        : IntersectOrthodromic(new Point(coord11.Longitude - 180, coord11.Latitude),
+                            new Point(coord12.Longitude + 180, coord12.Latitude), new Point(coord21.Longitude + 180, coord21.Latitude), new Point(coord22.Longitude + 180, coord22.Latitude));
+                    // Корректируем инверсию
+                    return new Point(res.Longitude > 0 ? res.Longitude - 180 : res.Longitude + 180, res.Latitude);
+                }
+            }
+
             var inLon = IntersectLongitude(coord11, coord12, coord21, coord22);
             var inLat1 = _interPoint.GetLatitude(inLon, coord11, coord12);
             var inLat2 = _interPoint.GetLatitude(inLon, coord21, coord22);

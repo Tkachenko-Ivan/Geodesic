@@ -30,15 +30,13 @@ namespace GeodesicLibraryTests.Tests
         [TestMethod]
         public void LongLineDirectInverseTest()
         {
-            //LongLineTest();
-            Assert.Inconclusive();
+            LongLineTest();
         }
 
         [TestMethod]
         public void IntersectionPolarDirectInverseTest()
         {
             IntersectionPolarTest();
-            //Assert.Inconclusive();
         }
        
         /// <summary>

@@ -379,7 +379,7 @@ namespace GeodesicLibraryTests.Tests
             Point pointSouthWest, Point pointNorthWest, Point pointNorth, Point pointNorthEast, Point pointEast, Point pointSouthEast)
         {
             AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast, new Spheroid());
-            //AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast, new Ellipsoid());
+            AtDifferentAngles(pointSouthWest, pointNorthWest, pointNorth, pointNorthEast, pointEast, pointSouthEast, new Ellipsoid());
         }
 
         public virtual void AtDifferentAngles(Point pointSouthWest, Point pointNorthWest, Point pointNorth, Point pointNorthEast, Point pointEast, Point pointSouthEast, IEllipsoid ellipsoid)

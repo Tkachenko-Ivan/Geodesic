@@ -32,7 +32,7 @@ namespace GeodesicLibraryTests.Tests
         public void LongLineIntermediatePointTest()
         {
             //LongLineTest();
-            Assert.Inconclusive();
+            Assert.Fail();
         }
 
         [TestMethod]
@@ -85,15 +85,6 @@ namespace GeodesicLibraryTests.Tests
             {
                 Assert.AreEqual(ex.Message, "При переходе через полюс, невозможно однозначно определить широту по долготе");
             }
-        }
-
-        /// <summary>
-        /// Тестирование ситуаций когда, значения широты или долготы у двух точек совпадает
-        /// </summary>
-        [TestMethod]
-        public void RightAngleIntermediatePointTest()
-        {
-            Assert.Inconclusive();
         }
 
         public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)

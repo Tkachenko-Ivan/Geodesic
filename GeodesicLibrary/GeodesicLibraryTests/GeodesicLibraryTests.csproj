@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Tests\AzimutDialTests.cs" />
     <Compile Include="Tests\IntermediatePointTests.cs" />
     <Compile Include="Tests\AzimuthTests.cs" />
     <Compile Include="Model\Ellipsoid.cs" />

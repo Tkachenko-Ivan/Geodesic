@@ -42,24 +42,6 @@ namespace GeodesicLibraryTests.Tests
         }
 
         /// <summary>
-        /// Проверка того как изменяется азимут при движении по прямой
-        /// </summary>
-        [TestMethod]
-        public void СhangeOfAzimutLineTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        /// <summary>
-        /// Изменение азимута при движении по окружности
-        /// </summary>
-        [TestMethod]
-        public void СhangeOfAzimutCircleTest()
-        {
-            Assert.Inconclusive();
-        }
-
-        /// <summary>
         /// Тестируется правильность определения азимута
         /// </summary>
         /// <remarks>

@@ -30,13 +30,6 @@ namespace GeodesicLibraryTests.Tests
         }
 
         [TestMethod]
-        public void LongLineIntersectTest()
-        {
-            LongLineTest();
-            //Assert.Inconclusive();
-        }
-
-        [TestMethod]
         public void IntersectionPolarAzimutTest()
         {
             Assert.Inconclusive();

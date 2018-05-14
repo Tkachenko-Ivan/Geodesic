@@ -28,12 +28,6 @@ namespace GeodesicLibraryTests.Tests
         }
 
         [TestMethod]
-        public void LongLineDirectInverseTest()
-        {
-            LongLineTest();
-        }
-
-        [TestMethod]
         public void IntersectionPolarDirectInverseTest()
         {
             IntersectionPolarTest();

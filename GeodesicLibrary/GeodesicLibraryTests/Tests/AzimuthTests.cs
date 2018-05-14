@@ -30,12 +30,6 @@ namespace GeodesicLibraryTests.Tests
         }
 
         [TestMethod]
-        public void LongLineAzimutTest()
-        {
-            LongLineTest();
-        }
-
-        [TestMethod]
         public void IntersectionPolarAzimutTest()
         {
             IntersectionPolarTest();

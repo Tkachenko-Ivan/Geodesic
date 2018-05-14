@@ -29,13 +29,6 @@ namespace GeodesicLibraryTests.Tests
         }
 
         [TestMethod]
-        public void LongLineIntermediatePointTest()
-        {
-            //LongLineTest();
-            Assert.Fail();
-        }
-
-        [TestMethod]
         public void IntersectionPolarIntermediatePointTest()
         {
             var intermediatePointService = new IntermediatePointService(new Spheroid());

@@ -10,29 +10,23 @@ namespace GeodesicLibraryTests.Tests
     {
 
         [TestMethod]
-        public void SimpleAzimutTest()
+        public void SimpleAzimutDialTest()
         {
             SimpleTest();
         }
 
 
         [TestMethod]
-        public void IntersectionAzimutTest()
+        public void IntersectionAzimutDialTest()
         {
             IntersectionTest();
         }
 
 
         [TestMethod]
-        public void Intersection180AzimutTest()
+        public void Intersection180AzimutDialTest()
         {
             Intersection180Test();
-        }
-
-        [TestMethod]
-        public void LongLineAzimutTest()
-        {
-            LongLineTest();
         }
 
         /// <summary>

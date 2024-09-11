@@ -29,14 +29,14 @@ namespace GeodesicLibrary.Services
         public double GetLatitude(double longitude, Point coord1, Point coord2)
         {
             // Разные знаки - т.е. разные полушария
-            if (coord1.Longitude * coord2.Longitude < 0)
+            if(coord1.Longitude * coord2.Longitude < 0)
             {
-                if (Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
+                if(Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
                     throw new Exception("При переходе через полюс, невозможно однозначно определить широту по долготе");
 
                 var min = Math.Min(coord1.Longitude, coord2.Longitude);
                 var max = Math.Max(coord1.Longitude, coord2.Longitude);
-                if (180 - max + 180 + min < 180)
+                if(180 - max + 180 + min < 180)
                 {
                     // Ближе через 180ый мередиан
                     // Проводим инверсию и решаем инвертированную задачу
@@ -51,14 +51,14 @@ namespace GeodesicLibrary.Services
             }
 
             // Приводим задачу к диапазону координат от -90 до +90
-            if (coord1.Longitude < -90 || coord2.Longitude < -90)
+            if(coord1.Longitude < -90 || coord2.Longitude < -90)
             {
                 var delta = -(Math.Min(coord1.Longitude, coord2.Longitude) + 90);
                 return
                     GetLatitude(longitude + delta, new Point(coord1.Longitude + delta, coord1.Latitude),
                         new Point(coord2.Longitude + delta, coord2.Latitude));
             }
-            if (coord1.Longitude > 90 || coord2.Longitude > 90)
+            if(coord1.Longitude > 90 || coord2.Longitude > 90)
             {
                 var delta = (Math.Max(coord1.Longitude, coord2.Longitude) - 90);
                 return
@@ -68,8 +68,8 @@ namespace GeodesicLibrary.Services
 
             // Видимо задача и так в нужном диапазоне
             return Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE
-                ? GetLatitudeSpheroid(longitude * Math.PI / 180, coord1, coord2)
-                : GetLatitudeEllipsoid(longitude * Math.PI / 180, coord1, coord2);
+            ? GetLatitudeSpheroid(longitude * Math.PI / 180, coord1, coord2)
+            : GetLatitudeEllipsoid(longitude * Math.PI / 180, coord1, coord2);
         }
 
         /// <summary>
@@ -82,14 +82,14 @@ namespace GeodesicLibrary.Services
         public double GetLongitude(double latitude, Point coord1, Point coord2)
         {
             // Разные знаки - т.е. разные полушария
-            if (coord1.Longitude * coord2.Longitude < 0)
+            if(coord1.Longitude * coord2.Longitude < 0)
             {
-                if (Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
+                if(Math.Abs(Math.Abs(coord1.Longitude) + Math.Abs(coord2.Longitude) - 180) < TOLERANCE)
                     throw new Exception("При переходе через полюс, невозможно однозначно определить долготу по широте");
 
                 var min = Math.Min(coord1.Longitude, coord2.Longitude);
                 var max = Math.Max(coord1.Longitude, coord2.Longitude);
-                if (180 - max + 180 + min < 180)
+                if(180 - max + 180 + min < 180)
                 {
                     // Ближе через 180ый мередиан
                     // Проводим инверсию и решаем инвертированную задачу
@@ -104,14 +104,14 @@ namespace GeodesicLibrary.Services
             }
 
             // Приводим задачу к диапазону координат от -90 до +90
-            if (coord1.Longitude < -90 || coord2.Longitude < -90)
+            if(coord1.Longitude < -90 || coord2.Longitude < -90)
             {
                 var delta = -(Math.Min(coord1.Longitude, coord2.Longitude) + 90);
                 return
                     GetLongitude(latitude, new Point(coord1.Longitude + delta, coord1.Latitude),
                         new Point(coord2.Longitude + delta, coord2.Latitude)) - delta;
             }
-            if (coord1.Longitude > 90 || coord2.Longitude > 90)
+            if(coord1.Longitude > 90 || coord2.Longitude > 90)
             {
                 var delta = (Math.Max(coord1.Longitude, coord2.Longitude) - 90);
                 return
@@ -144,16 +144,16 @@ namespace GeodesicLibrary.Services
                 var dist = inverce.OrthodromicDistance(first, second);
                 coordM = direct.DirectProblem(first, dist.ForwardAzimuth, dist.Distance / 2).Сoordinate;
 
-                if (Math.Abs(longitude - first.LonR) < TOLERANCE)
+                if(Math.Abs(longitude - first.LonR) < TOLERANCE)
                     return first.Latitude;
-                if (Math.Abs(longitude - second.LonR) < TOLERANCE)
+                if(Math.Abs(longitude - second.LonR) < TOLERANCE)
                     return second.Latitude;
 
-                if (IsBetween(first.LonR, coordM.LonR, longitude))
+                if(IsBetween(first.LonR, coordM.LonR, longitude))
                     second = coordM;
-                else if (IsBetween(second.LonR, coordM.LonR, longitude))
+                else if(IsBetween(second.LonR, coordM.LonR, longitude))
                     first = coordM;
-            } while (Math.Abs(coordM.LonR - longitude) > TOLERANCE);
+            } while(Math.Abs(coordM.LonR - longitude) > TOLERANCE);
             return coordM.Latitude;
         }
 
@@ -176,29 +176,29 @@ namespace GeodesicLibrary.Services
 
             // Это что-то странное, здесь я окончательнос перестал что-либо понимать, 
             // но так, или иначе эта штуковина заработала
-            if (c < 0 && b < 0 && angle > 0)
+            if(c < 0 && b < 0 && angle > 0)
                 return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90;
-            if (c > 0 && b > 0 && angle > 0)
+            if(c > 0 && b > 0 && angle > 0)
                 return (lonfet + Math.Atan(c / b)) * 180 / Math.PI - 90;
-            if (c < 0 && b < 0 && angle < 0)
+            if(c < 0 && b < 0 && angle < 0)
                 return -90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
-            if (c > 0 && b > 0 && angle < 0)
+            if(c > 0 && b > 0 && angle < 0)
                 return 90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
 
-            if (Math.Abs(b) < 0.00000001 && angle > 0)
+            if(Math.Abs(b) < 0.00000001 && angle > 0)
                 return -90 + (lonfet + Math.Atan(c / b)) * 180 / Math.PI;
-            if (Math.Abs(b) < 0.00000001 && angle < 0)
+            if(Math.Abs(b) < 0.00000001 && angle < 0)
                 return 90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
 
-            if (c * angle > 0)
+            if(c * angle > 0)
             {
-                if (c > 0)
-                    return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90; 
+                if(c > 0)
+                    return (lonfet + Math.Atan(c / b)) * 180 / Math.PI + 90;
                 return 90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
             }
             else
             {
-                if (c > 0)
+                if(c > 0)
                     return -90 - (lonfet - Math.Atan(c / b)) * 180 / Math.PI;
                 return -90 + (lonfet + Math.Atan(c / b)) * 180 / Math.PI;
             }
@@ -215,16 +215,16 @@ namespace GeodesicLibrary.Services
                 var dist = inverce.OrthodromicDistance(first, second);
                 coordM = direct.DirectProblem(first, dist.ForwardAzimuth, dist.Distance / 2).Сoordinate;
 
-                if (Math.Abs(latitude - first.LatR) < TOLERANCE)
+                if(Math.Abs(latitude - first.LatR) < TOLERANCE)
                     return first.Longitude;
-                if (Math.Abs(latitude - second.LatR) < TOLERANCE)
+                if(Math.Abs(latitude - second.LatR) < TOLERANCE)
                     return second.Longitude;
 
-                if (IsBetween(first.LatR, coordM.LatR, latitude))
+                if(IsBetween(first.LatR, coordM.LatR, latitude))
                     second = coordM;
-                else if (IsBetween(second.LatR, coordM.LatR, latitude))
+                else if(IsBetween(second.LatR, coordM.LatR, latitude))
                     first = coordM;
-            } while (Math.Abs(coordM.LatR - latitude) > TOLERANCE);
+            } while(Math.Abs(coordM.LatR - latitude) > TOLERANCE);
             return coordM.Longitude;
         }
 

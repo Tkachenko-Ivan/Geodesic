@@ -26,11 +26,11 @@ namespace GeodesicLibrary.Services
         public Point IntersectOrthodromic(Point coord11, Point coord12, Point coord21, Point coord22)
         {
             // Разные знаки - т.е. разные полушария
-            if (coord11.Longitude * coord12.Longitude < 0 || coord21.Longitude * coord22.Longitude < 0)
+            if(coord11.Longitude * coord12.Longitude < 0 || coord21.Longitude * coord22.Longitude < 0)
             {
                 var min = Math.Min(Math.Min(coord11.Longitude, coord12.Longitude), Math.Min(coord21.Longitude, coord22.Longitude));
                 var max = Math.Max(Math.Max(coord11.Longitude, coord12.Longitude), Math.Max(coord21.Longitude, coord22.Longitude));
-                if (180 - max + 180 + min < 180)
+                if(180 - max + 180 + min < 180)
                 {
                     // Ближе через 180ый мередиан
                     // Проводим инверсию и решаем инвертированную задачу
@@ -44,16 +44,29 @@ namespace GeodesicLibrary.Services
                 }
             }
 
+            if(Math.Abs(coord12.LonR - coord11.LonR) < TOLERANCE && Math.Abs(coord22.LonR - coord21.LonR) < TOLERANCE)
+            {
+                // Параллельные меридианы - точка пересечения на полюсе
+                return new Point(0, 90);
+            }
+
             var inLon = IntersectLongitude(coord11, coord12, coord21, coord22);
-            var inLat1 = _interPoint.GetLatitude(inLon, coord11, coord12);
-            var inLat2 = _interPoint.GetLatitude(inLon, coord21, coord22);
-            return new Point(inLon, (inLat1 + inLat2) / 2);
+            if(Math.Abs(coord11.LonR - coord12.LonR) < TOLERANCE)
+            {
+                var inLat2 = _interPoint.GetLatitude(inLon, coord21, coord22);
+                return new Point(inLon, inLat2);
+            }
+            else
+            {
+                var inLat1 = _interPoint.GetLatitude(inLon, coord11, coord12);
+                return new Point(inLon, inLat1);
+            }
         }
 
         private double IntersectLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
         {
             // Сфероид
-            if (Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
+            if(Math.Abs(_ellipsoid.EquatorialRadius - _ellipsoid.PolarRadius) < TOLERANCE)
                 return SpheroidLongitude(coord11, coord12, coord21, coord22);
             // Эллипсоид вращения
             return EllipsoidLongitude(coord11, coord12, coord21, coord22);
@@ -61,6 +74,11 @@ namespace GeodesicLibrary.Services
 
         private double SpheroidLongitude(Point coord11, Point coord12, Point coord21, Point coord22)
         {
+            if(Math.Abs(coord12.LonR - coord11.LonR) < TOLERANCE)
+                return coord12.Longitude;
+            if(Math.Abs(coord22.LonR - coord21.LonR) < TOLERANCE)
+                return coord22.Longitude;
+
             double dl1 = Math.Sin(coord12.LonR - coord11.LonR);
             double dl2 = Math.Sin(coord22.LonR - coord21.LonR);
 
@@ -81,9 +99,9 @@ namespace GeodesicLibrary.Services
 
             // TODO: Как-то странно, надо наверно задавать черезе отношение b1 к b2
             var answer = Math.Atan(-b1 / b2) * 180 / Math.PI;
-            if (answer < 0 && coord11.Longitude > 0 && coord12.Longitude > 0)
+            if(answer < 0 && coord11.Longitude > 0 && coord12.Longitude > 0)
                 return 180 + answer;
-            if (answer > 0 && coord11.Longitude < 0 && coord12.Longitude < 0)
+            if(answer > 0 && coord11.Longitude < 0 && coord12.Longitude < 0)
                 return -180 + answer;
 
             return answer;
@@ -110,18 +128,18 @@ namespace GeodesicLibrary.Services
                 var lat31 = _interPoint.GetLatitude(second, coord11, coord12);
                 var lat32 = _interPoint.GetLatitude(second, coord21, coord22);
 
-                if ((lat21 - lat22) * (lat31 - lat32) < 0)
+                if((lat21 - lat22) * (lat31 - lat32) < 0)
                     first = midLon;
-                else if ((lat21 - lat22) * (lat11 - lat12) < 0)
+                else if((lat21 - lat22) * (lat11 - lat12) < 0)
                     second = midLon;
-                else if (Math.Abs(lat11 - lat12) < TOLERANCE)
+                else if(Math.Abs(lat11 - lat12) < TOLERANCE)
                     return first;
-                else if (Math.Abs(lat21 - lat22) < TOLERANCE)
+                else if(Math.Abs(lat21 - lat22) < TOLERANCE)
                     return midLon;
-                else if (Math.Abs(lat31 - lat32) < TOLERANCE)
+                else if(Math.Abs(lat31 - lat32) < TOLERANCE)
                     return second;
 
-            } while (Math.Abs(first - second) > TOLERANCE);
+            } while(Math.Abs(first - second) > TOLERANCE);
             return midLon;
         }
     }

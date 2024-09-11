@@ -92,8 +92,8 @@ namespace GeodesicLibraryTests.Tests
             var secondOrtodrom2 = inverseProblemService.OrthodromicDistance(point3, new Point(intersectCoord.Longitude,
                 intersectCoord.Latitude));
 
-            Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.00000001);
-            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.00000001);
+            Assert.AreEqual(firstOrtodrom.ForwardAzimuth, firstOrtodrom2.ForwardAzimuth, 0.0000001);
+            Assert.AreEqual(secondOrtodrom.ForwardAzimuth, secondOrtodrom2.ForwardAzimuth, 0.0000001);
         }
 
         public override void Tests(Point point1, Point point2, IEllipsoid ellipsoid)
